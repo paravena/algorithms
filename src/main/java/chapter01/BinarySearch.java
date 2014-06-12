@@ -5,7 +5,7 @@ public class BinarySearch {
         return search(arr, key, 0, arr.length - 1);
     }
 
-    private static int search(int[] arr, int key, int lo, int hi) {
+    public static int search(int[] arr, int key, int lo, int hi) {
         if (lo > hi) return -1;
         int mid = lo + (hi - lo) / 2;
         if (key < arr[mid]) {
@@ -22,6 +22,8 @@ public class BinarySearch {
         int index = BinarySearch.search(arr, 28);
         System.out.println("index = " + index);
         index = BinarySearch.search(arr, 23);
+        System.out.println("index = " + index);
+        index = BinarySearch.search(arr, 100);
         System.out.println("index = " + index);
     }
 }
