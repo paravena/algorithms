@@ -2,32 +2,37 @@ package chapter01;
 
 public class CircularBinarySearch {
     public static int circularSearch(int[] arr, int key) {
-
         return circularSearch(arr, key, 0, arr.length - 1);
     }
 
     public static int circularSearch(int[] arr, int key, int lo, int hi) {
         int mid = lo + (hi - lo) / 2;
+        if (arr[mid] == key) {
+            return mid;
+        }
         int sortedHalf = 0;
         if (arr[lo] < arr[mid]) {
-            BinarySearch.search(arr, key, lo, mid - 1);
             sortedHalf = 1;
+            if (key >= arr[lo] && key <= arr[mid]) {
+                return BinarySearch.search(arr, key, lo, mid);
+            }
         } else if (arr[mid] < arr[hi]){
-            BinarySearch.search(arr, key, mid + 1, hi);
             sortedHalf = 2;
+            if (key >= arr[mid] && key <= arr[hi]) {
+                return BinarySearch.search(arr, key, mid, hi);
+            }
         }
 
         if (sortedHalf == 1) {
-            circularSearch(arr, key, lo, mid);
-        } else if (sortedHalf == 2) {
-            circularSearch(arr, key, mid, hi);
+            return circularSearch(arr, key, mid, hi);
+        } else {
+            return circularSearch(arr, key, lo, mid);
         }
-        return -1;
     }
 
     public static void main(String[] args) {
         int[] arrayRotated = {23, 27, 29, 31, 37, 43, 49, 56, 64, 78, 91, 99, 1, 4, 11, 14, 15, 17, 19};
-        int index = CircularBinarySearch.circularSearch(arrayRotated, 37);
+        int index = CircularBinarySearch.circularSearch(arrayRotated, 14);
         System.out.println("index = " + index);
     }
 }
