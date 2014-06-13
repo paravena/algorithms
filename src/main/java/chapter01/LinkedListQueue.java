@@ -4,9 +4,8 @@ import java.util.Iterator;
 
 public class LinkedListQueue<T> implements Iterable<T> {
     private HomeMadeLinkedList<T> items;
-    private int N;
 
-    public LinkedListQueue(int initialCapacity) {
+    public LinkedListQueue() {
         items = new HomeMadeLinkedList<T>();
     }
 
@@ -19,7 +18,7 @@ public class LinkedListQueue<T> implements Iterable<T> {
     }
 
     public int size() {
-        return N;
+        return items.size();
     }
 
     public boolean isEmpty() {
@@ -54,7 +53,7 @@ public class LinkedListQueue<T> implements Iterable<T> {
     }
 
     public static void main(String[] args) {
-        LinkedListQueue<String> queue = new LinkedListQueue<String>(10);
+        LinkedListQueue<String> queue = new LinkedListQueue<String>();
         queue.enqueue("Be");
         queue.enqueue("or");
         queue.enqueue("not");

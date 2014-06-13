@@ -9,14 +9,14 @@ public class HomeMadeLinkedList<T> implements Iterable<T> {
     private int N;
 
     public void add(T value) {
-        Node tempFirst = new Node(value);
+        Node temp = new Node(value);
         if (first != null) {
-            last.next = tempFirst;
-            tempFirst.previous = last;
-            last = tempFirst;
+            last.next = temp;
+            temp.previous = last;
+            last = temp;
         } else {
-            first = tempFirst;
-            last = tempFirst;
+            first = temp;
+            last = temp;
         }
         N++;
     }
@@ -25,7 +25,7 @@ public class HomeMadeLinkedList<T> implements Iterable<T> {
         T value = (T) last.value;
         last = last.previous;
         last.next = null;
-        N--;
+        --N;
         return value;
     }
 
