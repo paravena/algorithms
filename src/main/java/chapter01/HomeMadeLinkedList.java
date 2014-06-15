@@ -22,9 +22,29 @@ public class HomeMadeLinkedList<T> implements Iterable<T> {
     }
 
     public T removeLast() {
+        if (isEmpty()) return null;
         T value = (T) last.value;
-        last = last.previous;
-        last.next = null;
+        if (N > 1) {
+            last = last.previous;
+            last.next = null;
+        } else {
+            last = null;
+            first = null;
+        }
+        --N;
+        return value;
+    }
+
+    public T removeFirst() {
+        if (isEmpty()) return null;
+        T value = (T) first.value;
+        if (N > 1) {
+            first = first.next;
+            first.previous = null;
+        } else {
+            last = null;
+            first = null;
+        }
         --N;
         return value;
     }
@@ -49,6 +69,13 @@ public class HomeMadeLinkedList<T> implements Iterable<T> {
 
         private Node(T value) {
             this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "value=" + value +
+                    '}';
         }
     }
 

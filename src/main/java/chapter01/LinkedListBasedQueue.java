@@ -2,10 +2,10 @@ package chapter01;
 
 import java.util.Iterator;
 
-public class LinkedListQueue<T> implements Iterable<T> {
+public class LinkedListBasedQueue<T> implements Iterable<T> {
     private HomeMadeLinkedList<T> items;
 
-    public LinkedListQueue() {
+    public LinkedListBasedQueue() {
         items = new HomeMadeLinkedList<T>();
     }
 
@@ -14,7 +14,7 @@ public class LinkedListQueue<T> implements Iterable<T> {
     }
 
     public T dequeue() {
-        return items.removeLast();
+        return items.removeFirst();
     }
 
     public int size() {
@@ -23,6 +23,10 @@ public class LinkedListQueue<T> implements Iterable<T> {
 
     public boolean isEmpty() {
         return items.size() == 0;
+    }
+
+    public T last() {
+        return items.last();
     }
 
     @Override
@@ -53,7 +57,7 @@ public class LinkedListQueue<T> implements Iterable<T> {
     }
 
     public static void main(String[] args) {
-        LinkedListQueue<String> queue = new LinkedListQueue<String>();
+        LinkedListBasedQueue<String> queue = new LinkedListBasedQueue<String>();
         queue.enqueue("Be");
         queue.enqueue("or");
         queue.enqueue("not");
