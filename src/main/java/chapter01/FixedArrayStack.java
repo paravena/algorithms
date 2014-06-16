@@ -6,6 +6,10 @@ public class FixedArrayStack<T> implements Iterable<T> {
     private T[] items;
     private int N;
 
+    public FixedArrayStack() {
+        this(10);
+    }
+
     public FixedArrayStack(int initialCapacity) {
         items = (T[]) new Object[initialCapacity];
     }
@@ -54,15 +58,15 @@ public class FixedArrayStack<T> implements Iterable<T> {
     }
 
     private class FixedArrayStackIterator implements Iterator<T> {
-        private int i;
+        private int i = N;
         @Override
         public boolean hasNext() {
-            return i < N;
+            return i >= 0;
         }
 
         @Override
         public T next() {
-            return items[i++];
+            return items[i--];
         }
 
         @Override
