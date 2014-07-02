@@ -1,4 +1,4 @@
-package chapter01;
+package chapter02;
 
 public class Selection {
     public static void sort(Comparable[] a) {
