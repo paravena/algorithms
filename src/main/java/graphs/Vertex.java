@@ -6,22 +6,22 @@ import java.util.Set;
 
 public class Vertex {
     private String id;
-    private Map<String, Integer> connectedTo;
+    private Map<Vertex, Integer> connectedTo;
 
     public Vertex(String id) {
         this.id = id;
-        this.connectedTo = new HashMap<String, Integer>();
+        this.connectedTo = new HashMap<Vertex, Integer>();
     }
 
-    public void addNeighbor(String nbr) {
-        addNeighbor(nbr, 0);
+    public void addNeighbor(Vertex vertex) {
+        addNeighbor(vertex, 0);
     }
 
-    public void addNeighbor(String nbr, Integer weight) {
-        connectedTo.put(nbr, weight);
+    public void addNeighbor(Vertex vertex, Integer weight) {
+        connectedTo.put(vertex, weight);
     }
 
-    public Set<String> getConnections() {
+    public Set<Vertex> getConnections() {
         return connectedTo.keySet();
     }
 
@@ -29,7 +29,20 @@ public class Vertex {
         return id;
     }
 
-    public Integer getWeight(String nbr) {
-        return connectedTo.get(nbr);
+    public Integer getWeight(Vertex vertex) {
+        return connectedTo.get(vertex);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vertex vertex = (Vertex) o;
+        return !(id != null ? !id.equals(vertex.id) : vertex.id != null);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

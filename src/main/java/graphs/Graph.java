@@ -14,17 +14,23 @@ public class Graph implements Iterable<Vertex> {
         numVertices = 0;
     }
 
-    public Vertex addVertex(String key) {
-        numVertices++;
-        Vertex newVertex = new Vertex(key);
-        vertList.put(key, newVertex);
-        return newVertex;
+    public void addVertex(String id) {
+        addVertex(new Vertex(id));
     }
 
-    public void addEdge(String from, String to, Integer cost) {
-        if (!vertList.containsKey(from)) addVertex(from);
-        if (!vertList.containsKey(to)) addVertex(to);
-        vertList.get(from).addNeighbor(to, cost);
+    public void addVertex(Vertex vertex) {
+        numVertices++;
+        vertList.put(vertex.getId(), vertex);
+    }
+
+    public void addEdge(String fromId, String toId, Integer weight) {
+        addEdge(new Vertex(fromId), new Vertex(toId), weight);
+    }
+
+    public void addEdge(Vertex from, Vertex to, Integer weight) {
+        if (!vertList.containsKey(from.getId())) addVertex(from);
+        if (!vertList.containsKey(to.getId())) addVertex(to);
+        vertList.get(from.getId()).addNeighbor(to, weight);
     }
 
     public Collection<Vertex> getVertices() {
@@ -58,8 +64,8 @@ public class Graph implements Iterable<Vertex> {
         g.addEdge("5", "4", 8);
         g.addEdge("5", "2", 1);
         for (Vertex v : g) {
-            for (String id : v.getConnections()) {
-                System.out.printf("(%s, %s)\n", v.getId(), id);
+            for (Vertex n : v.getConnections()) {
+                System.out.printf("(%s, %s)\n", v.getId(), n.getId());
             }
         }
     }
