@@ -65,7 +65,7 @@ public class BreadthFirstSearch {
     public static void main(String[] args) throws IOException {
         BreadthFirstSearch bfs = new BreadthFirstSearch();
         Graph graph = bfs.buildGraph();
-        bfs.bfs(graph, graph.getVertexById("foil"));
+        bfs.bfs(graph, graph.getVertexById("fool"));
         Vertex sage = graph.getVertexById("sage");
         bfs.traverse(sage);
     }

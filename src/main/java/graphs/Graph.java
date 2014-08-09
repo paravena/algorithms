@@ -32,12 +32,20 @@ public class Graph implements Iterable<Vertex> {
     }
 
     public void addEdge(String fromId, String toId, Integer weight) {
-        addEdge(new Vertex(fromId), new Vertex(toId), weight);
+        Vertex from;
+        Vertex to;
+        if (!vertList.containsKey(fromId)) {
+            addVertex(fromId);
+        }
+        if (!vertList.containsKey(toId)) {
+            addVertex(toId);
+        }
+        from = getVertexById(fromId);
+        to = getVertexById(toId);
+        addEdge(from, to, weight);
     }
 
     public void addEdge(Vertex from, Vertex to, Integer weight) {
-        if (!vertList.containsKey(from.getId())) addVertex(from);
-        if (!vertList.containsKey(to.getId())) addVertex(to);
         vertList.get(from.getId()).addNeighbor(to, weight);
     }
 
