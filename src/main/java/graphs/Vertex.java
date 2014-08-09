@@ -7,10 +7,14 @@ import java.util.Set;
 public class Vertex {
     private String id;
     private Map<Vertex, Integer> connectedTo;
+    private Vertex parent;
+    private String color;
+    private Integer depth;
 
     public Vertex(String id) {
         this.id = id;
-        this.connectedTo = new HashMap<Vertex, Integer>();
+        color = "white";
+        connectedTo = new HashMap<Vertex, Integer>();
     }
 
     public void addNeighbor(Vertex vertex) {
@@ -44,5 +48,29 @@ public class Vertex {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    public Vertex getParent() {
+        return parent;
+    }
+
+    public void setParent(Vertex parent) {
+        this.parent = parent;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public Integer getDepth() {
+        return depth;
+    }
+
+    public void setDepth(Integer depth) {
+        this.depth = depth;
     }
 }

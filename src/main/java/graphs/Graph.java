@@ -23,6 +23,14 @@ public class Graph implements Iterable<Vertex> {
         vertList.put(vertex.getId(), vertex);
     }
 
+    public Vertex getVertexById(String id) {
+        return vertList.get(id);
+    }
+
+    public void addEdge(String fromId, String toId) {
+        addEdge(fromId, toId, 0);
+    }
+
     public void addEdge(String fromId, String toId, Integer weight) {
         addEdge(new Vertex(fromId), new Vertex(toId), weight);
     }
