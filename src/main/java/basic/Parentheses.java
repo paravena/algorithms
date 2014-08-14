@@ -1,8 +1,8 @@
-package chapter01;
+package basic;
 
 public class Parentheses {
     public boolean validate(String expression) {
-        FixedArrayStack<Character> stack = new FixedArrayStack<Character>(20);
+        ArrayStack<Character> stack = new ArrayStack<Character>(20);
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
             if (c == '[' || c == '{' || c == '(') {

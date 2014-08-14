@@ -1,8 +1,8 @@
-package chapter01;
+package basic;
 
 public class EvaluatePostfix {
     public Double evaluate(String expression) {
-        FixedArrayStack<String> stack = new FixedArrayStack<String>();
+        ArrayStack<String> stack = new ArrayStack<String>();
         Double operand1;
         Double operand2;
         Double result = 0.0;

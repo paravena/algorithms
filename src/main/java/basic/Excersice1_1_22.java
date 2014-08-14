@@ -1,6 +1,4 @@
-package chapter01;
-
-import java.util.Arrays;
+package basic;
 
 public class Excersice1_1_22 {
     public static int rank(int[] a, int k) {

@@ -1,8 +1,8 @@
-package chapter01;
+package basic;
 
 import java.util.Iterator;
 
-public class HomeMadeLinkedList<T> implements Iterable<T> {
+public class LinkedList<T> implements Iterable<T> {
     private Node first;
     private Node last;
 
@@ -51,7 +51,7 @@ public class HomeMadeLinkedList<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new HomeMadeLinkedListIterator();
+        return new LinkedListIterator();
     }
 
     public int size() {
@@ -83,10 +83,10 @@ public class HomeMadeLinkedList<T> implements Iterable<T> {
         return (T) last.value;
     }
 
-    private class HomeMadeLinkedListIterator implements Iterator<T> {
+    private class LinkedListIterator implements Iterator<T> {
         Node<T> current;
 
-        private HomeMadeLinkedListIterator() {
+        private LinkedListIterator() {
             current = first;
         }
 
@@ -110,7 +110,7 @@ public class HomeMadeLinkedList<T> implements Iterable<T> {
     }
 
     public static void main(String[] args) {
-        HomeMadeLinkedList<String> linkedList = new HomeMadeLinkedList<String>();
+        LinkedList<String> linkedList = new LinkedList<String>();
         linkedList.add("Be");
         linkedList.add("Or");
         linkedList.add("Not");

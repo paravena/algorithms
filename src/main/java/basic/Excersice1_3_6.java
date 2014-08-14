@@ -1,9 +1,9 @@
-package chapter01;
+package basic;
 
 public class Excersice1_3_6 {
     public static void main(String[] args) {
-        FixedArrayStack<String> stack = new FixedArrayStack<String>(20);
-        LinkedListBasedQueue<String> queue = new LinkedListBasedQueue<String>();
+        ArrayStack<String> stack = new ArrayStack<String>(20);
+        Queue<String> queue = new Queue<String>();
         queue.enqueue("gato");
         queue.enqueue("perro");
         queue.enqueue("tortuga");

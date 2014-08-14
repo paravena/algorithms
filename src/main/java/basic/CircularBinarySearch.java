@@ -1,4 +1,4 @@
-package chapter01;
+package basic;
 
 public class CircularBinarySearch {
     public static int circularSearch(int[] arr, int key) {

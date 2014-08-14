@@ -1,6 +1,6 @@
-package chapter01;
+package basic;
 
-public class Excersice1_1_14 {
+public class Logarithm {
     public static double lg10(double n) {
         int i = 0;
         while (n > 10) {

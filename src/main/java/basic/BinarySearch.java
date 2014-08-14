@@ -1,4 +1,4 @@
-package chapter01;
+package basic;
 
 public class BinarySearch {
     public static int search(int[] arr, int key) {

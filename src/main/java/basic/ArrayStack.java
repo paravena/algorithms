@@ -1,16 +1,16 @@
-package chapter01;
+package basic;
 
 import java.util.Iterator;
 
-public class FixedArrayStack<T> implements Iterable<T> {
+public class ArrayStack<T> implements Iterable<T> {
     private T[] items;
     private int N;
 
-    public FixedArrayStack() {
+    public ArrayStack() {
         this(10);
     }
 
-    public FixedArrayStack(int initialCapacity) {
+    public ArrayStack(int initialCapacity) {
         items = (T[]) new Object[initialCapacity];
     }
 
@@ -76,7 +76,7 @@ public class FixedArrayStack<T> implements Iterable<T> {
     }
 
     public static void main(String[] args) {
-        FixedArrayStack<String> stack = new FixedArrayStack<String>(10);
+        ArrayStack<String> stack = new ArrayStack<String>(10);
         stack.push("Be");
         stack.push("or");
         stack.push("not");

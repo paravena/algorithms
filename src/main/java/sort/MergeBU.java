@@ -1,4 +1,4 @@
-package chapter02;
+package sort;
 
 public class MergeBU {
     private static Comparable[] aux;
