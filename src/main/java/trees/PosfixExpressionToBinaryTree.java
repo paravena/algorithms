@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.Stack;
 import static util.MathUtility.isOperator;
 
+// Based on http://en.wikipedia.org/wiki/Binary_expression_tree
 public class PosfixExpressionToBinaryTree {
     public TreeNode<String> posfixToTree(String expression) {
         Stack<TreeNode<String>> stack = new Stack<TreeNode<String>>();

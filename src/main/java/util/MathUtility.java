@@ -5,6 +5,7 @@ import java.util.Stack;
 import java.util.regex.Pattern;
 
 public class MathUtility {
+    // Based on http://csis.pace.edu/~wolf/CS122/infix-postfix.htm
     public static String infixToPosfix(String expression) {
         String result = "";
         Scanner scan = new Scanner(expression);
