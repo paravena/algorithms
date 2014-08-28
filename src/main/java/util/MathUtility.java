@@ -93,5 +93,9 @@ public class MathUtility {
         String p5 = infixToPosfix("A * B  ^ C + D");
         assert " A B C ^ * D +".equals(p5) : p5 + " must be equal to  A B C ^ * D +";
         System.out.println("A * B ^ C + D => " + p5);
+
+        String p6 = infixToPosfix("A * ( B + C * D ) + E");
+        assert "A B C D * + * E +".equals(p5) : p6 + " must be equal to  A B C D * + * E +";
+        System.out.println("A * ( B + C * D ) + E => " + p6);
     }
 }

@@ -1,22 +1,22 @@
 package trees;
 
 public class TreeNode<T extends Comparable<T>> {
-    T element;
-    TreeNode<T> parent;
-    TreeNode<T> left;
-    TreeNode<T> right;
-    TreeNodeVisitor visitor;
+    protected T element;
+    protected TreeNode<T> parent;
+    protected TreeNode<T> left;
+    protected TreeNode<T> right;
+    protected TreeNodeVisitor<T> visitor;
 
-    TreeNode(T element) {
+    public TreeNode(T element) {
         this(element, null);
     }
 
-    TreeNode(T element, TreeNodeVisitor visitor) {
+    public TreeNode(T element, TreeNodeVisitor<T> visitor) {
         this.element = element;
         this.visitor = visitor;
     }
 
-    boolean add(T element) {
+    public boolean add(T element) {
         if (this.element.compareTo(element) >= 0) {
             if (this.left == null) {
                 this.left = new TreeNode<T>(element);
@@ -35,7 +35,7 @@ public class TreeNode<T extends Comparable<T>> {
         return false;
     }
 
-    void visit() {
+    public void visit() {
         if (visitor != null) {
             visitor.visit(element);
         } else {
@@ -61,5 +61,37 @@ public class TreeNode<T extends Comparable<T>> {
             right.postorder();
         }
         this.visit();
+    }
+
+    public T getElement() {
+        return element;
+    }
+
+    public void setElement(T element) {
+        this.element = element;
+    }
+
+    public TreeNode<T> getParent() {
+        return parent;
+    }
+
+    public void setParent(TreeNode<T> parent) {
+        this.parent = parent;
+    }
+
+    public TreeNode<T> getLeft() {
+        return left;
+    }
+
+    public void setLeft(TreeNode<T> left) {
+        this.left = left;
+    }
+
+    public TreeNode<T> getRight() {
+        return right;
+    }
+
+    public void setRight(TreeNode<T> right) {
+        this.right = right;
     }
 }
