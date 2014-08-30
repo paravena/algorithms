@@ -4,9 +4,9 @@ import java.util.Scanner;
 import java.util.Stack;
 import static util.MathUtility.isOperator;
 
-// Based on http://en.wikipedia.org/wiki/Binary_expression_tree
-public class PosfixExpressionToBinaryTree {
-    public TreeNode<String> posfixToTree(String expression) {
+public class BinaryTreeUtilities {
+    // Based on http://en.wikipedia.org/wiki/Binary_expression_tree
+    public static TreeNode<String> posfixToTree(String expression) {
         Stack<TreeNode<String>> stack = new Stack<TreeNode<String>>();
         Scanner scan = new Scanner(expression);
         while (scan.hasNext()) {
@@ -25,9 +25,19 @@ public class PosfixExpressionToBinaryTree {
         return stack.pop();
     }
 
+    public static boolean isBinarySearchTree(TreeNode<Integer> treeNode) {
+        return isBinarySearchTree(treeNode, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    public static boolean isBinarySearchTree(TreeNode<Integer> treeNode, Integer min, Integer max) {
+        return treeNode == null || treeNode.element > min &&
+                treeNode.element < max &&
+                isBinarySearchTree(treeNode.left, min, treeNode.element) &&
+                isBinarySearchTree(treeNode.right, treeNode.element, max);
+    }
+
     public static void main(String[] args) {
-        PosfixExpressionToBinaryTree pe2bt = new PosfixExpressionToBinaryTree();
-        TreeNode<String> root = pe2bt.posfixToTree("A B C D * + * E +");
+        TreeNode<String> root = BinaryTreeUtilities.posfixToTree("A B C D * + * E +");
         root.postorder();
     }
 }

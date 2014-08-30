@@ -47,11 +47,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
         tree.add(13);
         tree.add(14);
         tree.add(17);
-        tree.add(25);
+        //tree.add(25);
         tree.add(28);
         tree.add(29);
         tree.inorder();
         System.out.println("post order");
         tree.postorder();
+        boolean binarySearchTree = BinaryTreeUtilities.isBinarySearchTree(tree.root);
+        System.out.println("binarySearchTree = " + binarySearchTree);
     }
 }
