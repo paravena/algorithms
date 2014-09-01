@@ -73,6 +73,9 @@ public class MathUtility {
         return Pattern.compile("[\\(\\)]").matcher(parenthesis).matches();
     }
 
+    public static boolean isBetween(Integer num, Integer min, Integer max) {
+        return num > min && num < max;
+    }
     public static void main(String[] args) {
 
         String p1 = infixToPosfix("A * B + C");
