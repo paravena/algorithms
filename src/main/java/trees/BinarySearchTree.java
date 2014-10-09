@@ -1,5 +1,7 @@
 package trees;
 
+import basic.Queue;
+
 public class BinarySearchTree<T extends Comparable<T>> {
     private TreeNode<T> root;
 
@@ -20,6 +22,17 @@ public class BinarySearchTree<T extends Comparable<T>> {
         root.postorder();
     }
 
+    public void levelorder() {
+        Queue<TreeNode<T>> queue = new Queue<TreeNode<T>>();
+        queue.enqueue(root);
+        while (!queue.isEmpty()) {
+            TreeNode<T> n = queue.dequeue();
+            System.out.println(n.element + ",");
+            if (n.getLeft() != null) queue.enqueue(n.getLeft());
+            if (n.getRight() != null) queue.enqueue(n.getRight());
+        }
+    }
+
     public T find(T element) {
         TreeNode<T> current = root;
         while (current != null) {
@@ -37,6 +50,17 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     public static void main(String[] args) {
         BinarySearchTree<Integer> tree = new BinarySearchTree<Integer>();
+        /*
+               18
+              /  \
+            12   25
+           /  \    \
+         4    15   28
+        /    /  \    \
+      1    13   17   29
+       \    \
+        3   14
+         */
         tree.add(18);
         tree.add(12);
         tree.add(25);
@@ -51,8 +75,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
         tree.add(28);
         tree.add(29);
         tree.inorder();
-        System.out.println("post order");
+        System.out.println("post order traversal");
         tree.postorder();
+        System.out.println("order lever traversal");
+        tree.levelorder();
         boolean binarySearchTree = BinaryTreeUtilities.isBinarySearchTree(tree.root);
         System.out.println("binarySearchTree = " + binarySearchTree);
     }
