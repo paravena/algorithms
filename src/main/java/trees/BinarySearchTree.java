@@ -27,10 +27,19 @@ public class BinarySearchTree<T extends Comparable<T>> {
         queue.enqueue(root);
         while (!queue.isEmpty()) {
             TreeNode<T> n = queue.dequeue();
-            System.out.println(n.element + ",");
+            n.visit();
             if (n.getLeft() != null) queue.enqueue(n.getLeft());
             if (n.getRight() != null) queue.enqueue(n.getRight());
         }
+    }
+
+    public int height() {
+        return height(root);
+    }
+
+    private int height(TreeNode<T> node) {
+        if (node == null) return 0;
+        return 1 + Math.max(height(node.getLeft()), height(node.getRight()));
     }
 
     public T find(T element) {
@@ -74,12 +83,14 @@ public class BinarySearchTree<T extends Comparable<T>> {
         //tree.add(25);
         tree.add(28);
         tree.add(29);
+        System.out.println("\ninorder order traversal");
         tree.inorder();
-        System.out.println("post order traversal");
+        System.out.println("\npost order traversal");
         tree.postorder();
-        System.out.println("order lever traversal");
+        System.out.println("\norder lever traversal");
         tree.levelorder();
         boolean binarySearchTree = BinaryTreeUtilities.isBinarySearchTree(tree.root);
-        System.out.println("binarySearchTree = " + binarySearchTree);
+        System.out.println("\nbinarySearchTree = " + binarySearchTree);
+        System.out.println("tree.height: " + tree.height());
     }
 }

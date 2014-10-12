@@ -39,7 +39,7 @@ public class TreeNode<T extends Comparable<T>> {
         if (visitor != null) {
             visitor.visit(element);
         } else {
-            System.out.println(element);
+            System.out.print(element + ",");
         }
     }
 
