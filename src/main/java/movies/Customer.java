@@ -6,6 +6,9 @@ import java.util.Set;
 public class Customer {
     protected int customerId;
     protected String name;
+    protected int distance;
+    protected Customer friendOf;
+    protected boolean visited;
     protected Set<Customer> friends = new HashSet<Customer>();
     protected Set<Movie> watchedMovies = new HashSet<Movie>();
     protected Set<Movie> likedMovies = new HashSet<Movie>();
@@ -56,5 +59,29 @@ public class Customer {
 
     public void setLikedMovies(Set<Movie> likedMovies) {
         this.likedMovies = likedMovies;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public Customer getFriendOf() {
+        return friendOf;
+    }
+
+    public void setFriendOf(Customer friendOf) {
+        this.friendOf = friendOf;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 }
