@@ -1,5 +1,7 @@
 package graphs;
 
+import basic.Queue;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -60,6 +62,30 @@ public class Graph implements Iterable<Vertex> {
 
     public Integer getNumVertices() {
         return numVertices;
+    }
+
+    /**
+     * Breadth first search starting from a given vertex
+     *
+     * @param start starting vertex
+     */
+    public void bfs(Vertex start) {
+        start.setDepth(0);
+        start.setParent(null);
+        Queue<Vertex> queue = new Queue<Vertex>();
+        queue.enqueue(start);
+        while (!queue.isEmpty()) {
+            Vertex currentVertex = queue.dequeue();
+            for (Vertex vertex : currentVertex.getConnections()) {
+                if (vertex.getColor().equals("white")) {
+                    vertex.setColor("gray");
+                    vertex.setDepth(currentVertex.getDepth() + 1);
+                    vertex.setParent(currentVertex);
+                    queue.enqueue(vertex);
+                }
+            }
+            currentVertex.setColor("black");
+        }
     }
 
     public static void main(String[] args) {

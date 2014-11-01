@@ -38,25 +38,6 @@ public class WordLadder {
         return g;
     }
 
-    public void bfs(Graph g, Vertex start) {
-        start.setDepth(0);
-        start.setParent(null);
-        Queue<Vertex> queue = new basic.Queue<Vertex>();
-        queue.enqueue(start);
-        while (!queue.isEmpty()) {
-            Vertex currentVertex = queue.dequeue();
-            for (Vertex vertex : currentVertex.getConnections()) {
-                if (vertex.getColor().equals("white")) {
-                    vertex.setColor("gray");
-                    vertex.setDepth(currentVertex.getDepth() + 1);
-                    vertex.setParent(currentVertex);
-                    queue.enqueue(vertex);
-                }
-            }
-            currentVertex.setColor("black");
-        }
-    }
-
     public void traverse(Vertex from) {
         while (from.getParent() != null) {
             System.out.println(from.getId());
@@ -68,7 +49,7 @@ public class WordLadder {
     public static void main(String[] args) throws IOException {
         WordLadder bfs = new WordLadder();
         Graph graph = bfs.buildGraph();
-        bfs.bfs(graph, graph.getVertexById("fool"));
+        graph.bfs(graph.getVertexById("fool"));
         Vertex sage = graph.getVertexById("sage");
         bfs.traverse(sage);
     }
