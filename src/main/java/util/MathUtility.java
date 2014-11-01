@@ -76,8 +76,8 @@ public class MathUtility {
     public static boolean isBetween(Integer num, Integer min, Integer max) {
         return num > min && num < max;
     }
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         String p1 = infixToPosfix("A * B + C");
         assert "A B * C +".equals(p1) : p1 + " must be equal to A B * C +";
         System.out.println("A * B + C => " + p1);
