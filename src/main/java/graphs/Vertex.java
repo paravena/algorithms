@@ -10,11 +10,13 @@ public class Vertex {
     private Vertex parent;
     private String color;
     private Integer depth;
+    private Map<String, Object> data;
 
     public Vertex(String id) {
         this.id = id;
         color = "white";
         connectedTo = new HashMap<Vertex, Integer>();
+        data = new HashMap<String, Object>();
     }
 
     public void addNeighbor(Vertex vertex) {
@@ -35,6 +37,14 @@ public class Vertex {
 
     public Integer getWeight(Vertex vertex) {
         return connectedTo.get(vertex);
+    }
+
+    public Object getDataValue(String key) {
+        return data.get(key);
+    }
+
+    public void setDataValue(String key, Object value) {
+        data.put(key, value);
     }
 
     @Override
