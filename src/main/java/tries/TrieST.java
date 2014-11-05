@@ -49,6 +49,17 @@ public class TrieST<T> {
         return q;
     }
 
+    public Iterable<String> keysThatMatch(String pat) {
+        Queue<String> q = new Queue<String>();
+        collect(root, "", pat, q);
+        return q;
+    }
+
+    public String longestPrefixOf(String s) {
+        int length = search(root, s, 0, 0);
+        return s.substring(0, length);
+    }
+
     private void collect(Node x, String pre, Queue<String> q) {
         if (x == null) return;
         if (x.value != null) q.enqueue(pre);
@@ -57,12 +68,40 @@ public class TrieST<T> {
         }
     }
 
+    private void collect(Node x, String pre, String pat, Queue<String> q) {
+        int d = pre.length();
+        if (x == null) return;
+        if (d == pat.length() && x.value != null) q.enqueue(pre);
+        if (d == pat.length()) return;
+        char next = pat.charAt(d);
+        for (char c = 0; c < R; c++) {
+            if (next == '.' || next == c) {
+                collect(x.next[c], pre + c, pat, q);
+            }
+        }
+    }
+
+    private int search(Node x, String s, int d, int length) {
+        if (x == null) return length;
+        if (x.value != null) length = d;
+        if (d == s.length()) return length;
+        char c = s.charAt(d);
+        return search(x.next[c], s, d + 1, length);
+    }
+
     public static void main(String[] args) {
         TrieST<String> st = new TrieST<String>();
         st.put("pablo", "aravena");
         st.put("paulina", "allende");
-        for (String k : st.keys()) {
+        st.put("pau", "lita");
+        st.put("gato", "silvestre");
+        st.put("pato", "lucas");
+
+        for (String k : st.keysThatMatch(".ato")) {
             System.out.println("k = " + k);
         }
+
+        String longestPrefix = st.longestPrefixOf("paulina");
+        System.out.println("longestPrefix = " + longestPrefix);
     }
 }
