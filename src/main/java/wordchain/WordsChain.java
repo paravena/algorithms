@@ -1,22 +1,25 @@
 package wordchain;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class WordsChain {
     private WordDictionary dictionary;
+    // This map represents the adjacent list
+    private Map<String, Word> words;
+
     public WordsChain() {
         dictionary = WordDictionary.getInstance();
         buildGraph();
     }
 
     private void buildGraph() {
+        words = new HashMap<String, Word>();
         for (String word : dictionary) {
-            System.out.print("Valid words for " + word + " are: ");
             List<String> validWords = findValidWords(word);
             printList(validWords);
+            for (String validRelatedWord : validWords) {
+                addRelatedWord(word, validRelatedWord);
+            }
         }
     }
 
@@ -31,6 +34,50 @@ public class WordsChain {
         return validWords;
     }
 
+    public void findLongestChain() {
+        System.out.println("starting at word " + dictionary.getShortestWord());
+        Word shortestWord = lookupWord(dictionary.getShortestWord());
+        shortestWord.setDistance(0);
+        shortestWord.setComingFrom(null);
+        shortestWord.setVisited(true);
+        findLongestChain(shortestWord, 1, dictionary.size() - 1);
+    }
+
+    public void findLongestChain(Word word, int n, int limit) {
+        if (n < limit) {
+            for (Word rw : word.getRelatedWords()) {
+                if (!rw.isVisited()) {
+                    rw.setComingFrom(word);
+                    rw.setDistance(word.getDistance() + 1);
+                    findLongestChain(rw, n + 1, limit);
+                }
+            }
+        }
+    }
+
+    private Word addWord(String text) {
+        Word newWord = new Word(text);
+        words.put(text, newWord);
+        return newWord;
+    }
+
+    private Word lookupWord(String text) {
+        return words.get(text);
+    }
+
+    private void addRelatedWord(String wordText, String relatedWordText) {
+        Word word = lookupWord(wordText);
+        if (word == null) {
+            word = addWord(wordText);
+        }
+        Word relatedWord = lookupWord(relatedWordText);
+        if (relatedWord == null) {
+            relatedWord = addWord(relatedWordText);
+        }
+        word.addRelatedWord(relatedWord);
+        relatedWord.addRelatedWord(word); // Not sure if this must be symmetric
+    }
+
     private void printList(List<String> list) {
         System.out.print("[");
         for (int i = 0; i < list.size(); i++) {
@@ -41,71 +88,9 @@ public class WordsChain {
     }
 
     public static void main(String[] args) {
-        new WordsChain();
-    }
-
-    class Word {
-        protected String text;
-        protected Set<Word> relatedWords = new HashSet<Word>();
-        protected boolean visited;
-        protected Word comingFrom;
-        protected int distance;
-
-        public Word(String text) {
-            this.text = text;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        public Set<Word> getRelatedWords() {
-            return relatedWords;
-        }
-
-        public void setRelatedWords(Set<Word> relatedWords) {
-            this.relatedWords = relatedWords;
-        }
-
-        public boolean isVisited() {
-            return visited;
-        }
-
-        public void setVisited(boolean visited) {
-            this.visited = visited;
-        }
-
-        public Word getComingFrom() {
-            return comingFrom;
-        }
-
-        public void setComingFrom(Word comingFrom) {
-            this.comingFrom = comingFrom;
-        }
-
-        public int getDistance() {
-            return distance;
-        }
-
-        public void setDistance(int distance) {
-            this.distance = distance;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Word word = (Word) o;
-            return !(text != null ? !text.equals(word.text) : word.text != null);
-        }
-
-        @Override
-        public int hashCode() {
-            return text != null ? text.hashCode() : 0;
-        }
+        WordsChain wordsChain = new WordsChain();
+        wordsChain.findLongestChain();
+        Word word = wordsChain.lookupWord("starting");
+        System.out.println(word.getText() + " distance is " + word.getDistance());
     }
 }

@@ -95,7 +95,7 @@ public class FriendNetwork {
             friend = new Friend(friendName);
             addMember(friend);
         }
-        // simetric
+        // symmetric
         member.addFriend(friend);
         friend.addFriend(member);
     }
