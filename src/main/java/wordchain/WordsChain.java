@@ -16,7 +16,6 @@ public class WordsChain {
         words = new HashMap<String, Word>();
         for (String word : dictionary) {
             List<String> validWords = findValidWords(word);
-            printList(validWords);
             for (String validRelatedWord : validWords) {
                 addRelatedWord(word, validRelatedWord);
             }
@@ -45,6 +44,7 @@ public class WordsChain {
     }
 
     public void findLongestChain(Word word, int n, int limit) {
+        System.out.println("word.getText() = " + word.getText() + " n: " + n + " limit: " + limit);
         if (n < limit) {
             for (Word rw : word.getRelatedWords()) {
                 if (!rw.isVisited()) {
