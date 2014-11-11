@@ -14,11 +14,11 @@ public class KnightTour {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 String posId = positionToId(row, col, size);
-                System.out.println("moving to position " + posId + " (" +row+ ", "+col+")");
+                //System.out.println("moving to position " + posId + " (" +row+ ", "+col+")");
                 List<Integer[]> legalMoves = genLegalMoves(row, col, size);
                 for (Integer[] legalMove : legalMoves) {
                     String legalMoveId = positionToId(legalMove[0], legalMove[1], size);
-                    System.out.println("adding legal move from " + posId + " to " + legalMoveId);
+                    //System.out.println("adding legal move from " + posId + " to " + legalMoveId);
                     graph.addEdge(posId, legalMoveId);
                 }
             }
@@ -48,7 +48,6 @@ public class KnightTour {
      * @param limit the number of nodes in the path
      */
     public boolean knightTour(int n, LinkedList<Vertex> path, Vertex u, int limit) {
-        System.out.println("visiting node position " + u.getId());
         boolean done = false;
         u.setColor("gray");
         path.add(u);
@@ -62,7 +61,6 @@ public class KnightTour {
                 }
             }
             if (!done) { // prepare to backtrack
-                System.out.println("backtracking node position " + u.getId());
                 path.removeLast();
                 u.setColor("white");
             }
@@ -82,14 +80,13 @@ public class KnightTour {
 
     public static void main(String[] args) {
         KnightTour kt = new KnightTour();
-        String id = kt.positionToId(0 , 4, 8);
-        System.out.println("id = " + id);
-        id = kt.positionToId(3, 3, 5);
-        System.out.println("id = " + id);
         Graph graph = kt.buildKnightGraph(8);
-        Vertex vertex = graph.getVertexById("1");
-        System.out.println(vertex);
-        //kt.knightTour(0, new LinkedList<Vertex>(), graph.getVertexById("1"), 64);
+        LinkedList<Vertex> path = new LinkedList<Vertex>();
+        kt.knightTour(1, path , graph.getVertexById("1"), 64);
+        System.out.println("path.size: " + path.size());
+        for (Vertex v : path) {
+            System.out.printf("%s =>", v.getId());
+        }
     }
 }
 
