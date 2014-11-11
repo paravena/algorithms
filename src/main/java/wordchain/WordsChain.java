@@ -40,6 +40,7 @@ public class WordsChain {
         shortestWord.setDistance(0);
         shortestWord.setComingFrom(null);
         shortestWord.setVisited(true);
+        System.out.println("dictionary.size: " + dictionary.size());
         findLongestChain(shortestWord, 1, dictionary.size() - 1);
     }
 
@@ -49,6 +50,7 @@ public class WordsChain {
                 if (!rw.isVisited()) {
                     rw.setComingFrom(word);
                     rw.setDistance(word.getDistance() + 1);
+                    rw.setVisited(true);
                     findLongestChain(rw, n + 1, limit);
                 }
             }
@@ -87,10 +89,19 @@ public class WordsChain {
         System.out.println("]");
     }
 
+    public void traverse(String wordText) {
+        Word word = lookupWord(wordText);
+        while (word != null) {
+            System.out.print(word.getText() + " => ");
+            word = word.getComingFrom();
+        }
+
+    }
+
     public static void main(String[] args) {
         WordsChain wordsChain = new WordsChain();
         wordsChain.findLongestChain();
-        Word word = wordsChain.lookupWord("starting");
-        System.out.println(word.getText() + " distance is " + word.getDistance());
+        wordsChain.traverse("starting");
+        //starting => stating => statin => satin => sati => sat => at => a
     }
 }
