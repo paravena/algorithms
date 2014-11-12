@@ -6,9 +6,13 @@ public class WordsChain {
     private WordDictionary dictionary;
     // This map represents the adjacent list
     private Map<String, Word> words;
+    private String startWord;
+    private String furthestWord;
+    private int maxDistance;
 
     public WordsChain() {
         dictionary = WordDictionary.getInstance();
+        startWord = dictionary.getShortestWord();
         buildGraph();
     }
 
@@ -34,25 +38,22 @@ public class WordsChain {
     }
 
     public void findLongestChain() {
-        System.out.println("starting at word " + dictionary.getShortestWord());
-        Word shortestWord = lookupWord(dictionary.getShortestWord());
+        Word shortestWord = lookupWord(getStartWord());
         shortestWord.setDistance(0);
         shortestWord.setComingFrom(null);
         shortestWord.setVisited(true);
-        System.out.println("dictionary.size: " + dictionary.size());
-        findLongestChain(shortestWord, 1, dictionary.size() - 1);
+        findLongestChain(shortestWord, 1);
     }
 
-    public void findLongestChain(Word word, int n, int limit) {
-        System.out.println("word.getText() = " + word.getText() + " n: " + n + " limit: " + limit);
-        if (n < limit) {
-            for (Word rw : word.getRelatedWords()) {
-                if (!rw.isVisited()) {
-                    rw.setComingFrom(word);
-                    rw.setDistance(word.getDistance() + 1);
-                    rw.setVisited(true);
-                    findLongestChain(rw, n + 1, limit);
-                }
+    public void findLongestChain(Word word, int n) {
+        int currentDistance = word.getDistance();
+        for (Word rw : word.getRelatedWords()) {
+            if (!rw.isVisited()) {
+                rw.setComingFrom(word);
+                updateMaxDistance(currentDistance + 1, rw);
+                rw.setDistance(currentDistance + 1);
+                rw.setVisited(true);
+                findLongestChain(rw, ++n);
             }
         }
     }
@@ -80,28 +81,34 @@ public class WordsChain {
         relatedWord.addRelatedWord(word); // Not sure if this must be symmetric
     }
 
-    private void printList(List<String> list) {
-        System.out.print("[");
-        for (int i = 0; i < list.size(); i++) {
-            String element = list.get(i);
-            System.out.print(element + (i != (list.size() -1)? "," : ""));
+    public void updateMaxDistance(int distance, Word word) {
+        if (distance > maxDistance) {
+            maxDistance = distance;
+            furthestWord = word.getText();
         }
-        System.out.println("]");
     }
 
     public void traverse(String wordText) {
         Word word = lookupWord(wordText);
         while (word != null) {
-            System.out.print(word.getText() + " => ");
+            String sep = (word.getComingFrom() != null) ? " => " : "";
+            System.out.print(word.getText() + sep);
             word = word.getComingFrom();
         }
-
     }
+
+    public String getStartWord() {
+        return startWord;
+    }
+
+    public String getFurthestWord() {
+        return furthestWord;
+    }
+
 
     public static void main(String[] args) {
         WordsChain wordsChain = new WordsChain();
         wordsChain.findLongestChain();
-        wordsChain.traverse("starting");
-        //starting => stating => statin => satin => sati => sat => at => a
+        wordsChain.traverse(wordsChain.getFurthestWord());
     }
 }
