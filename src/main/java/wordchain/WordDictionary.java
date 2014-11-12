@@ -33,7 +33,7 @@ public class WordDictionary implements Iterable<String> {
     }
 
     private void loadDictionary() throws IOException {
-        InputStream is = getClass().getClassLoader().getResourceAsStream("words-chain.txt");
+        InputStream is = getClass().getClassLoader().getResourceAsStream("words_small.txt");
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String line;
         words = new HashMap<String, Integer>();
