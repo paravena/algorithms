@@ -6,11 +6,11 @@ public class WordsChain {
     private WordDictionary dictionary;
     // This map represents the adjacency list
     private Map<String, Word> wordAdjacencyList;
-    private Stack<Word> maxDistanceWordsStack;
+    private Stack<WordChainEntry> maxDistanceWordChainEntriesStack;
 
     public WordsChain() {
         dictionary = WordDictionary.getInstance();
-        maxDistanceWordsStack = new Stack<Word>();
+        maxDistanceWordChainEntriesStack = new Stack<WordChainEntry>();
         buildGraph();
     }
 
@@ -58,25 +58,33 @@ public class WordsChain {
         relatedWord.addRelatedWord(word); // Not sure if this must be symmetric
     }
 
-    private void updateMaxDistanceWords(Word word) {
-    }
-
-    public void findLongestChain() {
-        resetAllWords();
-        for (Word word : wordAdjacencyList.values()) {
-            findLongestChain(word);
+    private void updateMaxDistanceWords(WordChainEntry wordChainEntry) {
+        if (maxDistanceWordChainEntriesStack.isEmpty()) {
+            maxDistanceWordChainEntriesStack.push(wordChainEntry);
+        } else if (wordChainEntry.getDistance() > maxDistanceWordChainEntriesStack.peek().getDistance()) {
+            maxDistanceWordChainEntriesStack.removeAllElements();
+            maxDistanceWordChainEntriesStack.push(wordChainEntry);
+        } else if (wordChainEntry.getDistance() == maxDistanceWordChainEntriesStack.peek().getDistance()) {
+            maxDistanceWordChainEntriesStack.push(wordChainEntry);
         }
     }
 
-    public void findLongestChain(Word initialWord) {
+    public void findLongestChains() {
+        resetAllWords();
+        for (Word word : wordAdjacencyList.values()) {
+            findLongestChain(word, true);
+        }
+    }
+
+    public void findLongestChain(Word initialWord, boolean updateFlg) {
         Stack<Word> stack = new Stack<Word>();
         initialWord.setDistance(0);
+        initialWord.setComingFrom(null);
         Word lastWord = null;
         int maxDistanceReached = 0;
         stack.push(initialWord);
         while (!stack.isEmpty()) {
             Word currentWord = stack.pop();
-        initialWord.setComingFrom(null);
             for (Word word : currentWord.getRelatedWords()) {
                 if (!word.isVisited()) {
                     int nextDistance = currentWord.getDistance() + 1;
@@ -91,8 +99,9 @@ public class WordsChain {
             }
             currentWord.setVisited(true);
         }
-        System.out.println("from " + initialWord.getText() + " to " + lastWord.getText());
-
+        if (lastWord != null && updateFlg) {
+            updateMaxDistanceWords(new WordChainEntry(initialWord, lastWord, lastWord.getDistance()));
+        }
     }
 
     private void resetAllWords() {
@@ -103,8 +112,16 @@ public class WordsChain {
         }
     }
 
-    public void traverse(String wordText) {
-        Word word = lookupWord(wordText);
+    public void printLongestChains() {
+        while (!maxDistanceWordChainEntriesStack.isEmpty()) {
+            WordChainEntry wordChainEntry = maxDistanceWordChainEntriesStack.pop();
+            resetAllWords();
+            findLongestChain(wordChainEntry.getFromWord(), false);
+            traverse(wordChainEntry.getToWord());
+        }
+    }
+
+    public void traverse(Word word) {
         while (word != null) {
             String sep = (word.getComingFrom() != null) ? " => " : "";
             System.out.print(word.getText() + sep);
@@ -114,8 +131,8 @@ public class WordsChain {
 
     public static void main(String[] args) {
         WordsChain wordsChain = new WordsChain();
-        wordsChain.findLongestChain(wordsChain.lookupWord("a"));
-        wordsChain.traverse("starting");
+        wordsChain.findLongestChains();
+        wordsChain.printLongestChains();
     }
 
     /**
@@ -123,30 +140,30 @@ public class WordsChain {
      * a given word from another given word
      */
     class WordChainEntry {
-        protected Word fromWordText;
-        protected Word toWordText;
+        protected Word fromWord;
+        protected Word toWord;
         protected int distance;
 
-        WordChainEntry(Word fromWordText, Word toWordText, int distance) {
-            this.fromWordText = fromWordText;
-            this.toWordText = toWordText;
+        WordChainEntry(Word fromWord, Word toWord, int distance) {
+            this.fromWord = fromWord;
+            this.toWord = toWord;
             this.distance = distance;
         }
 
-        public Word getFromWordText() {
-            return fromWordText;
+        public Word getFromWord() {
+            return fromWord;
         }
 
-        public void setFromWordText(Word fromWordText) {
-            this.fromWordText = fromWordText;
+        public void setFromWord(Word fromWord) {
+            this.fromWord = fromWord;
         }
 
-        public Word getToWordText() {
-            return toWordText;
+        public Word getToWord() {
+            return toWord;
         }
 
-        public void setToWordText(Word toWordText) {
-            this.toWordText = toWordText;
+        public void setToWord(Word toWord) {
+            this.toWord = toWord;
         }
 
         public int getDistance() {
