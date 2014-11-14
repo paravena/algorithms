@@ -59,16 +59,6 @@ public class WordsChain {
     }
 
     private void updateMaxDistanceWords(Word word) {
-        if (maxDistanceWordsStack.isEmpty()) {
-            maxDistanceWordsStack.push(word);
-        } else {
-            if (word.getDistance() > maxDistanceWordsStack.peek().getDistance()) {
-                maxDistanceWordsStack.removeAllElements();
-                maxDistanceWordsStack.push(word);
-            } else if (word.getDistance() == maxDistanceWordsStack.peek().getDistance()) {
-                maxDistanceWordsStack.push(word);
-            }
-        }
     }
 
     public void findLongestChain() {
@@ -81,19 +71,28 @@ public class WordsChain {
     public void findLongestChain(Word initialWord) {
         Stack<Word> stack = new Stack<Word>();
         initialWord.setDistance(0);
-        initialWord.setComingFrom(null);
+        Word lastWord = null;
+        int maxDistanceReached = 0;
         stack.push(initialWord);
         while (!stack.isEmpty()) {
             Word currentWord = stack.pop();
+        initialWord.setComingFrom(null);
             for (Word word : currentWord.getRelatedWords()) {
                 if (!word.isVisited()) {
-                    word.setDistance(currentWord.getDistance() + 1);
+                    int nextDistance = currentWord.getDistance() + 1;
+                    word.setDistance(nextDistance);
                     word.setComingFrom(currentWord);
                     stack.push(word);
+                    if (nextDistance > maxDistanceReached) {
+                        lastWord = word;
+                        maxDistanceReached = nextDistance;
+                    }
                 }
             }
             currentWord.setVisited(true);
         }
+        System.out.println("from " + initialWord.getText() + " to " + lastWord.getText());
+
     }
 
     private void resetAllWords() {
@@ -115,7 +114,7 @@ public class WordsChain {
 
     public static void main(String[] args) {
         WordsChain wordsChain = new WordsChain();
-        wordsChain.findLongestChain(wordsChain.lookupWord("statin"));
+        wordsChain.findLongestChain(wordsChain.lookupWord("a"));
         wordsChain.traverse("starting");
     }
 
@@ -127,6 +126,12 @@ public class WordsChain {
         protected Word fromWordText;
         protected Word toWordText;
         protected int distance;
+
+        WordChainEntry(Word fromWordText, Word toWordText, int distance) {
+            this.fromWordText = fromWordText;
+            this.toWordText = toWordText;
+            this.distance = distance;
+        }
 
         public Word getFromWordText() {
             return fromWordText;
