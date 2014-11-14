@@ -100,6 +100,7 @@ public class WordsChain {
             currentWord.setVisited(true);
         }
         if (lastWord != null && updateFlg) {
+            System.out.println("from " + initialWord.getText() + " to " + lastWord.getText());
             updateMaxDistanceWords(new WordChainEntry(initialWord, lastWord, lastWord.getDistance()));
         }
     }
