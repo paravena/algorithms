@@ -55,7 +55,7 @@ public class WordsChain {
             relatedWord = addWord(relatedWordText);
         }
         word.addRelatedWord(relatedWord);
-        relatedWord.addRelatedWord(word); // Not sure if this must be symmetric
+//        relatedWord.addRelatedWord(word); // Not sure if this must be symmetric
     }
 
     private void updateMaxDistanceWords(WordChainEntry wordChainEntry) {
@@ -124,7 +124,7 @@ public class WordsChain {
 
     public void traverse(Word word) {
         while (word != null) {
-            String sep = (word.getComingFrom() != null) ? " => " : "";
+            String sep = (word.getComingFrom() != null) ? " => " : "\n";
             System.out.print(word.getText() + sep);
             word = word.getComingFrom();
         }
