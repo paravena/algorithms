@@ -11,7 +11,6 @@ import java.util.Map;
 public class WordDictionary implements Iterable<String> {
     private static WordDictionary instance;
     private Map<String, Integer> words;
-    private String shortestWord;
 
     public static WordDictionary getInstance() {
         if (instance == null) {
@@ -43,15 +42,7 @@ public class WordDictionary implements Iterable<String> {
             } else {
                 words.put(line, words.get(line) + 1);
             }
-            // Probably there could be more than one so I will change this into a list
-            if (shortestWord == null || line.length() < shortestWord.length()) {
-                shortestWord = line;
-            }
         }
-    }
-
-    public String getShortestWord() {
-        return shortestWord;
     }
 
     public int size() {
