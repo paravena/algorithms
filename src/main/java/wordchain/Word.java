@@ -70,4 +70,11 @@ public class Word {
     public int hashCode() {
         return text != null ? text.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "Word{" +
+                "text='" + text + '\'' +
+                '}';
+    }
 }

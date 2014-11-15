@@ -14,6 +14,9 @@ public class WordsChain {
         buildGraph();
     }
 
+    /**
+     * Build the related word directed graph
+     */
     private void buildGraph() {
         wordAdjacencyList = new HashMap<String, Word>();
         for (String word : dictionary) {
@@ -24,6 +27,13 @@ public class WordsChain {
         }
     }
 
+    /**
+     * Find valid words found in dictionary, related words are the one
+     * that differ only in one character
+     *
+     * @param word word text
+     * @return a list of valid related word
+     */
     private List<String> findValidWords(String word) {
         List<String> validWords = new ArrayList<String>();
         for (int i = 0; i < word.length(); i++) {
@@ -35,29 +45,49 @@ public class WordsChain {
         return validWords;
     }
 
+    /**
+     * Add a new word in adjacency list
+     *
+     * @param text word text
+     * @return new word
+     */
     private Word addWord(String text) {
-        Word newWord = new Word(text);
-        wordAdjacencyList.put(text, newWord);
+        Word newWord = lookupWord(text);
+        if (newWord == null) {
+            newWord = new Word(text);
+            wordAdjacencyList.put(text, newWord);
+        }
         return newWord;
     }
 
+    /**
+     * Look for a word in adjacency list
+     *
+     * @param text word text
+     * @return a word
+     */
     private Word lookupWord(String text) {
         return wordAdjacencyList.get(text);
     }
 
+    /**
+     * Add a related word in adjacency list
+     *
+     * @param wordText word
+     * @param relatedWordText related word
+     */
     private void addRelatedWord(String wordText, String relatedWordText) {
-        Word word = lookupWord(wordText);
-        if (word == null) {
-            word = addWord(wordText);
-        }
-        Word relatedWord = lookupWord(relatedWordText);
-        if (relatedWord == null) {
-            relatedWord = addWord(relatedWordText);
-        }
-        word.addRelatedWord(relatedWord);
-//        relatedWord.addRelatedWord(word); // Not sure if this must be symmetric
+        Word word = addWord(wordText);
+        Word relatedWord = addWord(relatedWordText);
+        // word.addRelatedWord(relatedWord); // must be directed graph
+        relatedWord.addRelatedWord(word);
     }
 
+    /**
+     * Keep track of longest distance between two given words after performing the DFS
+     *
+     * @param wordChainEntry word chain entry
+     */
     private void updateMaxDistanceWords(WordChainEntry wordChainEntry) {
         if (maxDistanceWordChainEntriesStack.isEmpty()) {
             maxDistanceWordChainEntriesStack.push(wordChainEntry);
@@ -69,13 +99,23 @@ public class WordsChain {
         }
     }
 
+    /**
+     * Determine the longest distance for a list of words
+     */
     public void findLongestChains() {
-        resetAllWords();
         for (Word word : wordAdjacencyList.values()) {
+            resetAllWords();
             findLongestChain(word, true);
         }
     }
 
+    /**
+     * Perform a depth first search in order to determine the longest chain
+     * reachable for a given word
+     *
+     * @param initialWord initial word
+     * @param updateFlg update longest distance stack
+     */
     public void findLongestChain(Word initialWord, boolean updateFlg) {
         Stack<Word> stack = new Stack<Word>();
         initialWord.setDistance(0);
@@ -100,11 +140,15 @@ public class WordsChain {
             currentWord.setVisited(true);
         }
         if (lastWord != null && updateFlg) {
-            System.out.println("from " + initialWord.getText() + " to " + lastWord.getText());
             updateMaxDistanceWords(new WordChainEntry(initialWord, lastWord, lastWord.getDistance()));
         }
     }
 
+    /**
+     * Reset all words previous to perform a Depth first search
+     *  Observation: this method add lot of complexity because is
+     *  traversing the complete list of words
+     */
     private void resetAllWords() {
         for (Word word : wordAdjacencyList.values()) {
             word.setDistance(0);
@@ -113,6 +157,9 @@ public class WordsChain {
         }
     }
 
+    /**
+     * For each longest chain entry print the complete word chain
+     */
     public void printLongestChains() {
         while (!maxDistanceWordChainEntriesStack.isEmpty()) {
             WordChainEntry wordChainEntry = maxDistanceWordChainEntriesStack.pop();
@@ -122,7 +169,12 @@ public class WordsChain {
         }
     }
 
-    public void traverse(Word word) {
+    /**
+     * Traverse the word chain printing all related words
+     *
+     * @param word initial word
+     */
+    private void traverse(Word word) {
         while (word != null) {
             String sep = (word.getComingFrom() != null) ? " => " : "\n";
             System.out.print(word.getText() + sep);
@@ -137,7 +189,7 @@ public class WordsChain {
     }
 
     /**
-     * The purpose of this class is to keep the maximum distance for
+     * The purpose of this class is to store the maximum distance for
      * a given word from another given word
      */
     class WordChainEntry {
