@@ -11,17 +11,25 @@ import java.util.Map;
 public class WordDictionary implements Iterable<String> {
     private static WordDictionary instance;
     private Map<String, Integer> words;
+    private static final String DEFAULT_DICTIONARY_PATH = "words_small.txt";
 
-    public static WordDictionary getInstance() {
+    public static WordDictionary getInstance(String dictionaryPath) {
         if (instance == null) {
-            instance = new WordDictionary();
+            instance = new WordDictionary(dictionaryPath);
         }
         return instance;
     }
 
-    private WordDictionary() {
+    public static WordDictionary getInstance() {
+        if (instance == null) {
+            instance = new WordDictionary(WordDictionary.DEFAULT_DICTIONARY_PATH);
+        }
+        return instance;
+    }
+
+    private WordDictionary(String dictionaryPath) {
         try {
-            loadDictionary();
+            loadDictionary(dictionaryPath);
         } catch (IOException ioe) {
             ioe.printStackTrace(System.out);
         }
@@ -31,8 +39,8 @@ public class WordDictionary implements Iterable<String> {
         return words.containsKey(word);
     }
 
-    private void loadDictionary() throws IOException {
-        InputStream is = getClass().getClassLoader().getResourceAsStream("words_medium.txt");
+    private void loadDictionary(String dictionaryPath) throws IOException {
+        InputStream is = getClass().getClassLoader().getResourceAsStream(dictionaryPath);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String line;
         words = new HashMap<String, Integer>();

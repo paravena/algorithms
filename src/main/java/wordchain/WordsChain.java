@@ -14,6 +14,12 @@ public class WordsChain {
         buildGraph();
     }
 
+    public WordsChain(String dictionaryPath) {
+        dictionary = WordDictionary.getInstance(dictionaryPath);
+        maxDistanceWordChainEntriesStack = new Stack<WordChainEntry>();
+        buildGraph();
+    }
+
     /**
      * Build the related word directed graph
      */
@@ -104,8 +110,8 @@ public class WordsChain {
      */
     public void findLongestChains() {
         for (Word word : wordAdjacencyList.values()) {
-            resetAllWords();
-            findLongestChain(word, true);
+            List<Word> path = findLongestChain(word, true);
+            resetAllWords(path);
         }
     }
 
@@ -116,8 +122,9 @@ public class WordsChain {
      * @param initialWord initial word
      * @param updateFlg update longest distance stack
      */
-    public void findLongestChain(Word initialWord, boolean updateFlg) {
+    public List<Word> findLongestChain(Word initialWord, boolean updateFlg) {
         Stack<Word> stack = new Stack<Word>();
+        List<Word> path = new ArrayList<Word>();
         initialWord.setDistance(0);
         initialWord.setComingFrom(null);
         Word lastWord = null;
@@ -138,19 +145,23 @@ public class WordsChain {
                 }
             }
             currentWord.setVisited(true);
+            path.add(currentWord);
         }
         if (lastWord != null && updateFlg) {
             updateMaxDistanceWords(new WordChainEntry(initialWord, lastWord, lastWord.getDistance()));
         }
+        return path;
     }
 
     /**
      * Reset all words previous to perform a Depth first search
      *  Observation: this method add lot of complexity because is
      *  traversing the complete list of words
+     * @param path only the word visited previously during the finding process
      */
-    private void resetAllWords() {
-        for (Word word : wordAdjacencyList.values()) {
+    private void resetAllWords(List<Word> path) {
+        // for (Word word : wordAdjacencyList.values()) { this line added lot of complexity
+        for (Word word : path) {
             word.setDistance(0);
             word.setVisited(false);
             word.setComingFrom(null);
@@ -161,10 +172,11 @@ public class WordsChain {
      * For each longest chain entry print the complete word chain
      */
     public void printLongestChains() {
+        List<Word> path = new ArrayList<Word>();
         while (!maxDistanceWordChainEntriesStack.isEmpty()) {
             WordChainEntry wordChainEntry = maxDistanceWordChainEntriesStack.pop();
-            resetAllWords();
-            findLongestChain(wordChainEntry.getFromWord(), false);
+            resetAllWords(path);
+            path = findLongestChain(wordChainEntry.getFromWord(), false);
             traverse(wordChainEntry.getToWord());
         }
     }
@@ -183,7 +195,12 @@ public class WordsChain {
     }
 
     public static void main(String[] args) {
-        WordsChain wordsChain = new WordsChain();
+        WordsChain wordsChain;
+        if (args.length > 0 && args[0].trim().length() > 0) {
+            wordsChain = new WordsChain(args[0]);
+        } else {
+            wordsChain = new WordsChain();
+        }
         wordsChain.findLongestChains();
         wordsChain.printLongestChains();
     }
