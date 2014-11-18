@@ -10,7 +10,7 @@ public class Excersice1_3_5 {
             N = N / 2;
         }
         for (Integer element : stack) {
-            System.out.println("element = " + element);
+            System.out.println("key = " + element);
         }
         while (!stack.isEmpty()) System.out.println(stack.pop());
     }

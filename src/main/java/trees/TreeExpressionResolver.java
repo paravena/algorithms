@@ -34,13 +34,13 @@ public class TreeExpressionResolver implements TreeNodeVisitor<String> {
 
     public static void main(String[] args) {
         TreeExpressionResolver resolver = new TreeExpressionResolver();
-        TreeNode<String> root = new TreeNode<String>("/", resolver);
-        TreeNode<String> add = new TreeNode<String>("+", resolver);
+        TreeNode<String, String> root = new TreeNode<String, String>("/", resolver);
+        TreeNode<String, String> add = new TreeNode<String, String>("+", resolver);
         root.left = add;
-        root.right = new TreeNode<String>("3", resolver);
-        add.left = new TreeNode<String>("12", resolver);
-        add.right = new TreeNode<String>("24", resolver);
-        root.postorder();
+        root.right = new TreeNode<String, String>("3", resolver);
+        add.left = new TreeNode<String, String>("12", resolver);
+        add.right = new TreeNode<String, String>("24", resolver);
+        root.postOrder();
         System.out.println(resolver.getResult());
     }
 }
