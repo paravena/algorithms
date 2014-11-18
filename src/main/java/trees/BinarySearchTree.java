@@ -3,15 +3,19 @@ package trees;
 import basic.Queue;
 
 public class BinarySearchTree<T extends Comparable<T>> {
+    private int size = 0;
     private TreeNode<T> root;
 
     public boolean add(T element) {
+        boolean result = false;
         if (root == null) {
             root = new TreeNode<T>(element);
-            return true;
+            result = true;
         } else {
-            return root.add(element);
+            result = root.add(element);
         }
+        size++;
+        return result;
     }
 
     public void inorder() {

@@ -43,7 +43,7 @@ public class TreeNode<T extends Comparable<T>> {
         }
     }
 
-    void inorder() {
+    public void inorder() {
         if (left != null) {
             left.inorder();
         }
@@ -53,7 +53,7 @@ public class TreeNode<T extends Comparable<T>> {
         }
     }
 
-    void postorder() {
+    public void postorder() {
         if (left != null) {
             left.postorder();
         }
@@ -61,6 +61,34 @@ public class TreeNode<T extends Comparable<T>> {
             right.postorder();
         }
         this.visit();
+    }
+
+    public boolean isLeaf() {
+        return left == null && right == null;
+    }
+
+    public boolean hasRightChild() {
+        return right != null;
+    }
+
+    public boolean hasLeftChild() {
+        return left != null;
+    }
+
+    public boolean hasBothChildren() {
+        return left != null && right != null;
+    }
+
+    public boolean hasAnyChildren() {
+        return left != null || right != null;
+    }
+
+    public boolean remove() {
+        // Three cases node :
+        //   1 - The node to be deleted has no children
+        //   2 - The node to be deleted has only one child
+        //   3 - The node to be deleted has two children
+        return true;
     }
 
     public T getElement() {
