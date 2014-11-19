@@ -2,35 +2,43 @@ package trees;
 
 public class TreeNode<T extends Comparable<T>,V> {
     protected T key;
-    protected V payload;
+    protected V value;
     protected TreeNode<T, V> parent;
     protected TreeNode<T, V> left;
     protected TreeNode<T, V> right;
     protected TreeNodeVisitor<T> visitor;
 
     public TreeNode(T key) {
-        this(key, null);
+        this(key, null, null);
+    }
+
+    public TreeNode(T key, V value) {
+        this(key, value, null);    
     }
 
     public TreeNode(T key, TreeNodeVisitor<T> visitor) {
+        this(key, null, visitor);    
+    }
+    
+    public TreeNode(T key, V value, TreeNodeVisitor<T> visitor) {
         this.key = key;
         this.visitor = visitor;
     }
 
-    public boolean add(T key, V payload) {
+    public boolean add(T key, V value) {
         if (this.key.compareTo(key) >= 0) {
             if (this.left == null) {
-                this.left = new TreeNode<T, V>(key);
+                this.left = new TreeNode<T, V>(key, value);
                 return true;
             } else {
-                this.left.add(key, payload);
+                this.left.add(key, value);
             }
         } else if (this.key.compareTo(key) < 0) {
             if (this.right == null) {
                 this.right = new TreeNode<T, V>(key);
                 return true;
             } else {
-                this.right.add(key, payload);
+                this.right.add(key, value);
             }
         }
         return false;
@@ -84,6 +92,17 @@ public class TreeNode<T extends Comparable<T>,V> {
         return left != null || right != null;
     }
 
+    public boolean isLeftChild() {
+        return parent != null && getParent().left == this;
+    }
+
+    public boolean isRightChild() {
+        return parent != null && getParent().right == this;
+    }
+
+    public boolean isRoot() {
+        return parent == null;
+    }
     public void replaceNodeData(T element, TreeNode<T, V> leftChild, TreeNode<T, V> rightChild) {
 
     }
@@ -103,17 +122,24 @@ public class TreeNode<T extends Comparable<T>,V> {
         } else if (hasBothChildren()) {
             // find a successor depending on where the current node
             // is located either left or right
-        } else if (hasLeftChild()) {
-            // connect parent of current node with left child
-            if (this.parent != null) {
-                TreeNode leftChild = this.left;
-                this.getParent().setLeft(leftChild);
-                leftChild.setParent(this.getParent());
-            } else {
+        } else {
+            if (hasLeftChild()) {
+                if (isLeftChild()) {
 
+                } else if (isRightChild()) {
+
+                } else { // is root
+
+                }
+            } else { // has right child
+                if (isLeftChild()) {
+
+                } else if (isRightChild()) {
+
+                } else { // is root
+
+                }
             }
-        } else if (hasRightChild()) {
-            // connect parent of current node with right child
         }
         return true;
     }
@@ -150,11 +176,11 @@ public class TreeNode<T extends Comparable<T>,V> {
         this.right = right;
     }
 
-    public V getPayload() {
-        return payload;
+    public V getValue() {
+        return value;
     }
 
-    public void setPayload(V payload) {
-        this.payload = payload;
+    public void setValue(V value) {
+        this.value = value;
     }
 }
