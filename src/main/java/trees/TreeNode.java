@@ -72,6 +72,68 @@ public class TreeNode<T extends Comparable<T>,V> {
         this.visit();
     }
 
+    public TreeNode<T, V> findMin() {
+        TreeNode<T, V> current = this;
+        while (current.hasLeftChild()) {
+            current = current.left;
+        }
+        return current;
+    }
+
+    /**
+     * Three cases:
+     * If the node has a right child, then the successor is the smallest key in the right subtree.
+     * If the node has no right child and is the left child of its parent, then the parent is the successor.
+     * If the node is the right child of its parent, and itself has no right child, then the successor to this
+     * node is the successor of its parent, excluding this node.
+
+     * @return successor tree node
+     */
+    public TreeNode<T, V> findSuccessor() {
+        TreeNode<T, V> result = null;
+        if (this.hasRightChild()) {
+            result = this.findMin();
+        } else {
+            // TODO this part is not clear for me
+            if (this.parent != null) { // is not root
+                if (this.isLeftChild()) {
+                    result = this.parent;
+                } else {
+                    this.parent.right = null;
+                    result = parent.findSuccessor();
+                    this.parent.right = this;
+                }
+            }
+        }
+        return result;
+    }
+
+    public void spliceOut() {
+        if (this.isLeaf()) {
+            if (this.isLeftChild()) {
+                this.parent.left = null;
+            } else {
+                this.parent.right = null;
+            }
+        } else if (this.hasAnyChildren()) {
+            if (this.hasLeftChild()) {
+                if (this.isLeftChild()) {
+                    this.parent.left = this.left;
+                } else {
+                    this.parent.right = this.left;
+                }
+                this.left.parent = this.parent;
+            } else {
+                if (this.isLeftChild()) {
+                    this.parent.left = this.right;
+                } else {
+                    this.parent.right = this.right;
+                }
+                this.right.parent = this.parent;
+            }
+        }
+    }
+
     public boolean isLeaf() {
         return left == null && right == null;
     }
@@ -103,8 +165,18 @@ public class TreeNode<T extends Comparable<T>,V> {
     public boolean isRoot() {
         return parent == null;
     }
-    public void replaceNodeData(T element, TreeNode<T, V> leftChild, TreeNode<T, V> rightChild) {
 
+    public void replaceNodeData(T key, V value, TreeNode<T, V> leftChild, TreeNode<T, V> rightChild) {
+        this.key = key;
+        this.value = value;
+        this.left = leftChild;
+        this.right = rightChild;
+        if (this.hasLeftChild()) {
+            this.left.parent = this;
+        }
+        if (this.hasRightChild()) {
+            this.right.parent = this;
+        }
     }
 
     public boolean remove() {
@@ -122,22 +194,36 @@ public class TreeNode<T extends Comparable<T>,V> {
         } else if (hasBothChildren()) {
             // find a successor depending on where the current node
             // is located either left or right
+            TreeNode<T, V> successor = this.findSuccessor();
+            successor.spliceOut();
+            this.key = successor.key;
+            this.value = successor.value;
         } else {
-            if (hasLeftChild()) {
-                if (isLeftChild()) {
-
-                } else if (isRightChild()) {
-
+            if (this.hasLeftChild()) {
+                if (this.isLeftChild()) {
+                    this.left.parent = this.parent;
+                    this.parent.left = this.left;
+                } else if (this.isRightChild()) {
+                    this.left.parent = this.parent;
+                    this.parent.right = this.left;
                 } else { // is root
-
+                    this.replaceNodeData(this.left.key,
+                            this.left.value,
+                            this.left.left,
+                            this.left.right);
                 }
             } else { // has right child
-                if (isLeftChild()) {
-
-                } else if (isRightChild()) {
-
+                if (this.isLeftChild()) {
+                    this.right.parent = this.parent;
+                    this.parent.left = this.right;
+                } else if (this.isRightChild()) {
+                    this.right.parent = this.parent;
+                    this.parent.right = this.right;
                 } else { // is root
-
+                    this.replaceNodeData(this.right.key,
+                            this.right.value,
+                            this.right.left,
+                            this.right.right);
                 }
             }
         }
