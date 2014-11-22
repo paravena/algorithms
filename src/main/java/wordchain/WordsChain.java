@@ -155,7 +155,7 @@ public class WordsChain {
 
     /**
      * Reset all words previous to perform a Depth first search
-     *  Observation: this method add lot of complexity because is
+     *  Observation: this method put lot of complexity because is
      *  traversing the complete list of words
      * @param path only the word visited previously during the finding process
      */

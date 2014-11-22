@@ -25,20 +25,20 @@ public class TreeNode<T extends Comparable<T>,V> {
         this.visitor = visitor;
     }
 
-    public boolean add(T key, V value) {
+    public boolean put(T key, V value) {
         if (this.key.compareTo(key) >= 0) {
             if (this.left == null) {
                 this.left = new TreeNode<T, V>(key, value);
                 return true;
             } else {
-                this.left.add(key, value);
+                this.left.put(key, value);
             }
         } else if (this.key.compareTo(key) < 0) {
             if (this.right == null) {
                 this.right = new TreeNode<T, V>(key);
                 return true;
             } else {
-                this.right.add(key, value);
+                this.right.put(key, value);
             }
         }
         return false;
@@ -134,6 +134,17 @@ public class TreeNode<T extends Comparable<T>,V> {
         }
     }
 
+    public TreeNode<T, V> get(T key) {
+        if (this.key.compareTo(key) == 0) {
+            return this;
+        } else if (key.compareTo(this.key) < 0) {
+            return this.left.get(key);
+        } else if (key.compareTo(this.key) > 0) {
+            return this.right.get(key);
+        }
+        return null;
+    }
+
     public boolean isLeaf() {
         return left == null && right == null;
     }
@@ -192,7 +203,7 @@ public class TreeNode<T extends Comparable<T>,V> {
                 this.getParent().setRight(null);
             }
         } else if (hasBothChildren()) {
-            // find a successor depending on where the current node
+            // get a successor depending on where the current node
             // is located either left or right
             TreeNode<T, V> successor = this.findSuccessor();
             successor.spliceOut();

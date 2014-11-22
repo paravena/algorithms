@@ -2,17 +2,20 @@ package trees;
 
 import basic.Queue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BinarySearchTree<T extends Comparable<T>, V> {
     private int size = 0;
     private TreeNode<T, V> root;
 
-    public boolean add(T key, V payload) {
+    public boolean put(T key, V payload) {
         boolean result;
         if (root == null) {
             root = new TreeNode<T, V>(key);
             result = true;
         } else {
-            result = root.add(key, payload);
+            result = root.put(key, payload);
         }
         size++;
         return result;
@@ -46,18 +49,32 @@ public class BinarySearchTree<T extends Comparable<T>, V> {
         return 1 + Math.max(height(node.getLeft()), height(node.getRight()));
     }
 
-    public TreeNode<T, V> find(T key) {
-        TreeNode<T, V> current = root;
-        while (current != null) {
-            if (current.key.compareTo(key) < 0) {
-                current = current.right;
-            } else if (current.key.compareTo(key) >= 0)  {
-                current = current.left;
-            } else {
-                return current;
-            }
+    public V get(T key) {
+        V result = null;
+        TreeNode<T, V> found = root.get(key);
+        if (found != null) result = found.getValue();
+        return result;
+    }
+
+    public void printKDistanceNodesFromRoot(int k) {
+        TreeNode<T, V> currentNode = root;
+        List<TreeNode<T, V>> listOfNodes = new ArrayList<TreeNode<T, V>>();
+        printKDistanceNodes(currentNode, listOfNodes, k);
+        System.out.print("[");
+        for (TreeNode<T, V> treeNode : listOfNodes) {
+            System.out.print(treeNode.key + ",");
         }
-        return null;
+        System.out.println("]");
+    }
+
+    private void printKDistanceNodes(TreeNode<T, V> currentNode, List<TreeNode<T, V>> listOfNodes, int k) {
+        if (currentNode == null) return;
+        if (k == 0) {
+            listOfNodes.add(currentNode);
+        } else if (k > 0) {
+            printKDistanceNodes(currentNode.left, listOfNodes, k - 1);
+            printKDistanceNodes(currentNode.right, listOfNodes, k - 1);
+        }
     }
 
     public int size() {
@@ -65,7 +82,7 @@ public class BinarySearchTree<T extends Comparable<T>, V> {
     }
 
     public static void main(String[] args) {
-        BinarySearchTree<Integer, Integer> tree = new BinarySearchTree<Integer, Integer>();
+        BinarySearchTree<Integer, Integer> bst = new BinarySearchTree<Integer, Integer>();
         /*
                18
               /  \
@@ -77,27 +94,19 @@ public class BinarySearchTree<T extends Comparable<T>, V> {
        \    \
         3   14
          */
-        tree.add(18, 18);
-        tree.add(12, 12);
-        tree.add(25, 25);
-        tree.add(4, 4);
-        tree.add(15, 15);
-        tree.add(1, 1);
-        tree.add(3, 3);
-        tree.add(13, 13);
-        tree.add(14, 14);
-        tree.add(17, 17);
-        //tree.add(25);
-        tree.add(28, 28);
-        tree.add(29, 29);
+        Integer[] numbers = new Integer[]{18, 12, 25, 4, 15, 1, 3, 13, 14, 17, 28, 29};
+        for (Integer number : numbers) {
+            bst.put(number, number);
+        }
         System.out.println("\ninOrder order traversal");
-        tree.inOrder();
+        bst.inOrder();
         System.out.println("\npost order traversal");
-        tree.postOrder();
+        bst.postOrder();
         System.out.println("\norder lever traversal");
-        tree.levelOrder();
-        boolean binarySearchTree = BinaryTreeUtilities.isBinarySearchTree(tree.root);
+        bst.levelOrder();
+        boolean binarySearchTree = BinaryTreeUtilities.isBinarySearchTree(bst.root);
         System.out.println("\nbinarySearchTree = " + binarySearchTree);
-        System.out.println("tree.height: " + tree.height());
+        System.out.println("tree.height: " + bst.height());
+        bst.printKDistanceNodesFromRoot(1);
     }
 }
