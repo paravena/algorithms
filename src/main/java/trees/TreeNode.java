@@ -7,6 +7,8 @@ public class TreeNode<T extends Comparable<T>,V> {
     protected TreeNode<T, V> left;
     protected TreeNode<T, V> right;
     protected TreeNodeVisitor<T> visitor;
+    protected boolean visited;
+    protected int distance;
 
     public TreeNode(T key) {
         this(key, null, null);
@@ -29,6 +31,7 @@ public class TreeNode<T extends Comparable<T>,V> {
         if (this.key.compareTo(key) >= 0) {
             if (this.left == null) {
                 this.left = new TreeNode<T, V>(key, value);
+                this.left.parent = this;
                 return true;
             } else {
                 this.left.put(key, value);
@@ -36,6 +39,7 @@ public class TreeNode<T extends Comparable<T>,V> {
         } else if (this.key.compareTo(key) < 0) {
             if (this.right == null) {
                 this.right = new TreeNode<T, V>(key);
+                this.right.parent = this;
                 return true;
             } else {
                 this.right.put(key, value);
@@ -279,5 +283,39 @@ public class TreeNode<T extends Comparable<T>,V> {
 
     public void setValue(V value) {
         this.value = value;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public boolean isIdentical(TreeNode<T, V> treeNode) {
+        boolean equalKey = this.key.compareTo(treeNode.key) == 0;
+        if (!equalKey) return false;
+        boolean equalLeft = false;
+        boolean equalRight = false;
+        if (this.left != null && treeNode.left != null) {
+            equalLeft = this.left.isIdentical(treeNode.left);
+        } else if (this.left == null && treeNode.left == null) {
+            equalLeft = true;
+        }
+        if (this.right != null && treeNode.right != null) {
+            equalRight = this.right.isIdentical(treeNode.right);
+        } else if (this.right == null && treeNode.right == null) {
+            equalRight = true;
+        }
+        return equalLeft && equalRight;
     }
 }

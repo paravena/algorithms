@@ -3,7 +3,9 @@ package trees;
 import basic.Queue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BinarySearchTree<T extends Comparable<T>, V> {
     private int size = 0;
@@ -56,15 +58,15 @@ public class BinarySearchTree<T extends Comparable<T>, V> {
         return result;
     }
 
+    public TreeNode<T, V> getTreeNode(T key) {
+        return root.get(key);
+    }
+
     public void printKDistanceNodesFromRoot(int k) {
         TreeNode<T, V> currentNode = root;
-        List<TreeNode<T, V>> listOfNodes = new ArrayList<TreeNode<T, V>>();
-        printKDistanceNodes(currentNode, listOfNodes, k);
-        System.out.print("[");
-        for (TreeNode<T, V> treeNode : listOfNodes) {
-            System.out.print(treeNode.key + ",");
-        }
-        System.out.println("]");
+        List<TreeNode<T, V>> listOfTreeNodes = new ArrayList<TreeNode<T, V>>();
+        printKDistanceNodes(currentNode, listOfTreeNodes, k);
+        printListOfTreeNodes(listOfTreeNodes);
     }
 
     private void printKDistanceNodes(TreeNode<T, V> currentNode, List<TreeNode<T, V>> listOfNodes, int k) {
@@ -75,6 +77,43 @@ public class BinarySearchTree<T extends Comparable<T>, V> {
             printKDistanceNodes(currentNode.left, listOfNodes, k - 1);
             printKDistanceNodes(currentNode.right, listOfNodes, k - 1);
         }
+    }
+
+    private void printListOfTreeNodes(List<TreeNode<T, V>> listOfTreeNodes) {
+        System.out.print("[");
+        for (TreeNode<T, V> treeNode : listOfTreeNodes) {
+            System.out.print(treeNode.key + ",");
+        }
+        System.out.println("]");
+    }
+
+    public void printTopView() {
+        Set<Integer> distancesFromRoot = new HashSet<Integer>();
+        List<TreeNode<T, V>> topTreeNodeList = new ArrayList<TreeNode<T, V>>();
+        Queue<TreeNode<T, V>> queue = new Queue<TreeNode<T, V>>();
+        root.setDistance(0);
+        queue.enqueue(root);
+        while (!queue.isEmpty()) {
+            TreeNode<T, V> n = queue.dequeue();
+            if (!distancesFromRoot.contains(n.distance)) {
+                topTreeNodeList.add(n);
+                distancesFromRoot.add(n.distance);
+            }
+            if (n.getLeft() != null) {
+                n.left.setDistance(n.getDistance() - 1);
+                queue.enqueue(n.getLeft());
+            }
+            if (n.getRight() != null) {
+                n.right.setDistance(n.getDistance() + 1);
+                queue.enqueue(n.getRight());
+            }
+        }
+        printListOfTreeNodes(topTreeNodeList);
+    }
+
+    public boolean isSubTree(TreeNode<T, V> treeNode) {
+        TreeNode<T, V> subTreeNode = root.get(treeNode.key);
+        return subTreeNode != null && subTreeNode.isIdentical(treeNode);
     }
 
     public int size() {
@@ -94,7 +133,7 @@ public class BinarySearchTree<T extends Comparable<T>, V> {
        \    \
         3   14
          */
-        Integer[] numbers = new Integer[]{18, 12, 25, 4, 15, 1, 3, 13, 14, 17, 28, 29};
+        Integer[] numbers = {18, 12, 25, 4, 15, 1, 3, 13, 14, 17, 28, 29};
         for (Integer number : numbers) {
             bst.put(number, number);
         }
@@ -108,5 +147,13 @@ public class BinarySearchTree<T extends Comparable<T>, V> {
         System.out.println("\nbinarySearchTree = " + binarySearchTree);
         System.out.println("tree.height: " + bst.height());
         bst.printKDistanceNodesFromRoot(1);
+        bst.printTopView();
+        System.out.println("is subtree " + bst.isSubTree(bst.getTreeNode(15)));
+        Integer[] otherNumbers = {15, 13, 17, 14};
+        BinarySearchTree<Integer, Integer> otherBst = new BinarySearchTree<Integer, Integer>();
+        for (Integer otherNumber : otherNumbers) {
+            otherBst.put(otherNumber, otherNumber);
+        }
+        System.out.println("is subtree " + bst.isSubTree(otherBst.root));
     }
 }
