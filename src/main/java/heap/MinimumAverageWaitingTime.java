@@ -29,6 +29,12 @@ public class MinimumAverageWaitingTime {
                 Map<String, Object> result = calculatePartialAverage(cookingQueue, clock);
                 average += (Double) result.get("average");
                 clock = (Long) result.get("clock");
+                if (clock < po.getArrivalTime()) {
+                    clock = po.getArrivalTime();
+                }
+                po.setCompletionTime(clock + po.getCookingTime());
+                clock += po.getCookingTime();
+                average += po.getWaitingTime();
             }
         }
 
@@ -38,7 +44,7 @@ public class MinimumAverageWaitingTime {
 
         average = average / N;
 
-        System.out.println(average.intValue()); // 1418670047
+        System.out.println(average.longValue()); // 8485548331-80289690037
     }
 
     private static Map<String, Object> calculatePartialAverage(PriorityQueue<PizzaOrder> cookingQueue, Long clock) {
