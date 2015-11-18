@@ -1,8 +1,5 @@
-7
+4
 aab
-defgab
-abcde
-aabcde
-cedaaa
-bbbbbbbbbb
-jabjjjad
+aac
+aacghgh
+aabghgh
