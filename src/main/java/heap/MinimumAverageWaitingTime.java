@@ -22,20 +22,30 @@ public class MinimumAverageWaitingTime {
         average += po.getWaitingTime();
 
         while (pizzaOrders.size() > 0) {
-            po = pizzaOrders.poll();
-            if (po.getArrivalTime() <= clock) {
-                cookingQueue.add(po);
-            } else {
+            while (pizzaOrders.size() > 0 && pizzaOrders.peek().getArrivalTime() <= clock) {
+                cookingQueue.add(pizzaOrders.poll());
+            }
+            if (pizzaOrders.size() == 0) {
+                break;
+            }
+            if (cookingQueue.size() > 0) {
                 Map<String, Object> result = calculatePartialAverage(cookingQueue, clock);
                 average += (Double) result.get("average");
                 clock = (Long) result.get("clock");
-                if (clock < po.getArrivalTime()) {
-                    clock = po.getArrivalTime();
-                }
-                po.setCompletionTime(clock + po.getCookingTime());
-                clock += po.getCookingTime();
-                average += po.getWaitingTime();
             }
+
+            if (pizzaOrders.size() == 0) {
+                break;
+            }
+
+            po = pizzaOrders.poll();
+            if (clock <= po.getArrivalTime()) {
+                clock = po.getArrivalTime();
+            }
+            cookingQueue.add(po);
+            //po.setCompletionTime(clock + po.getCookingTime());
+            //clock += po.getCookingTime();
+            //average += po.getWaitingTime();
         }
 
         if (cookingQueue.size() > 0) {
@@ -54,6 +64,9 @@ public class MinimumAverageWaitingTime {
             po.setCompletionTime(clock + po.getCookingTime());
             clock += po.getCookingTime();
             partialAverage += po.getWaitingTime();
+            while (pizzaOrders.size() > 0 && pizzaOrders.peek().getArrivalTime() <= clock) {
+                cookingQueue.add(pizzaOrders.poll());
+            }
         }
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("average", partialAverage);
