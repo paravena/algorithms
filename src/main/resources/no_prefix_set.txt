@@ -1,5 +1,7 @@
-4
-aab
-aac
+6
+aaaa
 aacghgh
 aabghgh
+aa
+aab
+aac
