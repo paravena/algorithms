@@ -48,16 +48,18 @@ public class SwapNodes {
 
     private int calculateHeight(Node root) {
         if (root == null) return 0;
-        return Math.max(calculateHeight(root.left) + 1, calculateHeight(root.right) + 1);
+        return 1 + Math.max(calculateHeight(root.left), calculateHeight(root.right));
     }
 
     private void swapNodesAt(Node root, int h, int limit) {
-        while (h < limit) {
-            List<Node> nodesAtHeight = findNodesAtHeight(root, h - 1);
+        int k = 1;
+        while (h <= limit) {
+            h = h * k;
+            List<Node> nodesAtHeight = findNodesAtHeight(root, h);
             for (Node n : nodesAtHeight) {
                 swapNode(n);
             }
-            h *= 2;
+            k++;
         }
         inorder(root);
         System.out.print("\n");
@@ -78,22 +80,19 @@ public class SwapNodes {
 
     private List<Node> findNodesAtHeight(Node root, int h) {
         List<Node> result = new ArrayList<Node>();
-        result = findNodesAtHeight(root, h, result);
+        findNodesAtHeight(root, h, result);
         return result;
     }
 
-    private List<Node> findNodesAtHeight(Node root, int h, List<Node> result) {
-        if (root == null) return result;
-        if (h == 0) {
+    private void findNodesAtHeight(Node root, int h, List<Node> result) {
+        if (root == null) return;
+        if (h == 1) {
             result.add(root);
         } else {
             findNodesAtHeight(root.left, h - 1, result);
             findNodesAtHeight(root.right, h - 1, result);
         }
-        return result;
     }
-
-
 
     private class Node {
         protected int data;
