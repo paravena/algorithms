@@ -1,6 +1,16 @@
+<<<<<<< HEAD
 4
 aabghgh
 aacghgh
 aab
 aac
 
+=======
+6
+aaaa
+aacghgh
+aabghgh
+aa
+aab
+aac
+>>>>>>> 5b3f860afba3077d511d70bb984b8d1c0c64ef14
