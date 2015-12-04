@@ -39,9 +39,9 @@ public class SwapNodes {
         i = 0;
         while (i < T) {
             int h = scan.nextInt();
-            scan.nextLine();
             swapNodesAt(root, h, H);
             i++;
+            if (scan.hasNext()) scan.nextLine();
         }
         return root;
     }
