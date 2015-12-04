@@ -1,5 +1,6 @@
 4
+aabghgh
+aacghgh
 aab
 aac
-aacghgh
-aabghgh
+
