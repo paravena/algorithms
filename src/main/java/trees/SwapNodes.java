@@ -56,14 +56,15 @@ public class SwapNodes {
     }
 
     private void swapNodesAt(Node root, int h, int limit) {
-        int k = 1;
+        int i = 1;
+        int k = h;
         while (h <= limit) {
-            h = h * k;
             List<Node> nodesAtHeight = findNodesAtHeight(root, h);
             for (Node n : nodesAtHeight) {
                 swapNode(n);
             }
-            k++;
+            i++;
+            h = k * i;
         }
         inorder(root);
         System.out.print("\n");
