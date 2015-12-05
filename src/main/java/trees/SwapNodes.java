@@ -7,10 +7,15 @@ import java.util.*;
 public class SwapNodes {
     public static void main(String[] args) {
         SwapNodes sn = new SwapNodes();
-        Node root = sn.readInput(System.in);
+        sn.readInput(SwapNodes.class.getClassLoader().getResourceAsStream("swap_nodes_input_04.txt"));
     }
 
-    private Node readInput(InputStream in) {
+    private void readInput() {
+        readInput(System.in);
+    }
+
+
+    private void readInput(InputStream in) {
         Scanner scan = new Scanner(in);
         int N = scan.nextInt();
         scan.nextLine();
@@ -43,7 +48,6 @@ public class SwapNodes {
             i++;
             if (scan.hasNext()) scan.nextLine();
         }
-        return root;
     }
 
     private int calculateHeight(Node root) {
