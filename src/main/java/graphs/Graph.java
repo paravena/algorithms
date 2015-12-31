@@ -48,7 +48,7 @@ public class Graph implements Iterable<Vertex> {
     }
 
     public void addEdge(Vertex from, Vertex to, Integer weight) {
-        vertList.get(from.getId()).addNeighbor(to, weight);
+        from.addNeighbor(to, weight);
     }
 
     public Collection<Vertex> getVertices() {
