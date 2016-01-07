@@ -5,20 +5,31 @@ import java.util.Scanner;
 
 public class BiggerIsGreater {
     public static void main(String[] args) {
-        readInput(System.in);
+        readInput(BiggerIsGreater.class.getClassLoader().getResourceAsStream("bigger_is_greater_input.txt"));
     }
 
     private static void readInput(InputStream in) {
         Scanner scan = new Scanner(in);
+
+        Scanner out = new Scanner(BiggerIsGreater.class.getClassLoader().getResourceAsStream("bigger_is_greater_output.txt"));
         int numberOfTestCases = scan.nextInt();
         scan.nextLine();
         for (int i = 0; i < numberOfTestCases; i++) {
             String word = scan.nextLine();
-            printNextLexicographicallyWord(word);
+            String result = printNextLexicographicallyWord(word);
+            String expected = out.nextLine();
+            if (expected.equals(result)) {
+                System.out.println(result);
+            } else {
+                System.out.println("TestCase: " + i + " expected " + expected + " actual " + result);
+                break;
+            }
+
+            printNextLexicographicallyWord("pqommldkafmnwzidydgjghxcbnwyjdxpvmkztdfmcxlkargafjzyee");
         }
     }
 
-    private static boolean printNextLexicographicallyWord(String word) {
+    private static String printNextLexicographicallyWord(String word) {
         char[] arr = word.toCharArray();
         int L = arr.length;
         int i = L - 1;
@@ -27,8 +38,7 @@ public class BiggerIsGreater {
             i--;
         }
         if (i <= 0) {
-            System.out.println("no answer");
-            return false;
+            return "no answer";
         }
 
         int pivotIndex = i - 1;
@@ -47,8 +57,7 @@ public class BiggerIsGreater {
             i++;
             j--;
         }
-        System.out.println(new String(arr));
-        return true;
+        return new String(arr);
     }
 
     private static void swapCharacters(char[] arr, int i, int j) {
