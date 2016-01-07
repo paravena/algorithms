@@ -11,21 +11,12 @@ public class BiggerIsGreater {
     private static void readInput(InputStream in) {
         Scanner scan = new Scanner(in);
 
-        Scanner out = new Scanner(BiggerIsGreater.class.getClassLoader().getResourceAsStream("bigger_is_greater_output.txt"));
         int numberOfTestCases = scan.nextInt();
         scan.nextLine();
         for (int i = 0; i < numberOfTestCases; i++) {
             String word = scan.nextLine();
             String result = printNextLexicographicallyWord(word);
-            String expected = out.nextLine();
-            if (expected.equals(result)) {
-                System.out.println(result);
-            } else {
-                System.out.println("TestCase: " + i + " expected " + expected + " actual " + result);
-                break;
-            }
-
-            printNextLexicographicallyWord("pqommldkafmnwzidydgjghxcbnwyjdxpvmkztdfmcxlkargafjzyee");
+            System.out.println(result);
         }
     }
 
@@ -44,7 +35,7 @@ public class BiggerIsGreater {
         int pivotIndex = i - 1;
         // Find successor to pivot
         int j = L - 1;
-        while (arr[pivotIndex] > arr[j]) {
+        while (arr[pivotIndex] >= arr[j]) {
             j--;
         }
         swapCharacters(arr, pivotIndex, j);
