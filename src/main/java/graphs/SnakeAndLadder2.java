@@ -1,10 +1,7 @@
 package graphs;
 
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class SnakeAndLadder2 {
     private static final int NUMBER_OF_SQUARES = 100;
@@ -19,8 +16,29 @@ public class SnakeAndLadder2 {
         int numberOfTestCases = scan.nextInt();
         scan.nextLine();
         for (int i = 0; i < numberOfTestCases; i++) {
-
+            TestCase testCase = readTestCase(scan);
         }
+    }
+
+    private TestCase readTestCase(Scanner scan) {
+        TestCase testCase = new TestCase();
+        testCase.populateVertexList();
+        int L = scan.nextInt();
+        scan.nextLine();
+        List<SquarePointPair> ladders = new ArrayList<SquarePointPair>(L);
+        for (int i = 0; i < L; i++) {
+            String[] tokens = scan.nextLine().split("\\s");
+            ladders.add(i, new SquarePointPair(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1])));
+        }
+        int S = scan.nextInt();
+        scan.nextLine();
+        List<SquarePointPair> snakes = new ArrayList<SquarePointPair>(S);
+        for (int i = 0; i < S; i++) {
+            String[] tokens = scan.nextLine().split("\\s");
+            snakes.add(i, new SquarePointPair(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1])));
+        }
+        testCase.populateEdges(ladders, snakes);
+        return testCase;
     }
 
     private class TestCase {
@@ -30,17 +48,28 @@ public class SnakeAndLadder2 {
 
         public TestCase() {
             vertexList = new HashMap<Integer, Vertex>();
-            populateVertexList();
+
         }
 
-        private void populateVertexList() {
+        public void populateVertexList() {
             for (int i = 1; i <= NUMBER_OF_SQUARES; i++) {
                 vertexList.put(i, new Vertex(i, Integer.MAX_VALUE));
             }
         }
 
-        public void populateEdges(SquarePointPair[] ladders, SquarePointPair[] snakes) {
+        public void populateEdges(List<SquarePointPair> ladders, List<SquarePointPair> snakes) {
+            for (int i = 1; i <= NUMBER_OF_SQUARES; i++) {
+                Vertex currentVertex = vertexList.get(i);
+                addNeighborsToVertex(currentVertex, ladders, snakes);
+            }
+        }
 
+        private void addNeighborsToVertex(Vertex currentVertex,
+                                          List<SquarePointPair> ladders,
+                                          List<SquarePointPair> snakes) {
+            for (int i = 1; i <= 6; i++) {
+
+            }
         }
     }
 
@@ -59,6 +88,21 @@ public class SnakeAndLadder2 {
 
         public int getTo() {
             return to;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            SquarePointPair that = (SquarePointPair) o;
+
+            return from == that.from;
+        }
+
+        @Override
+        public int hashCode() {
+            return from;
         }
     }
 
