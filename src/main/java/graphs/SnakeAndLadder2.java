@@ -17,6 +17,8 @@ public class SnakeAndLadder2 {
         scan.nextLine();
         for (int i = 0; i < numberOfTestCases; i++) {
             TestCase testCase = readTestCase(scan);
+            testCase.shortestPath();
+            testCase.printResult();
         }
     }
 
@@ -25,17 +27,19 @@ public class SnakeAndLadder2 {
         testCase.populateVertexList();
         int L = scan.nextInt();
         scan.nextLine();
-        List<SquarePointPair> ladders = new ArrayList<SquarePointPair>(L);
+        Map<Integer, SquarePointPair> ladders = new HashMap<Integer, SquarePointPair>(L);
         for (int i = 0; i < L; i++) {
             String[] tokens = scan.nextLine().split("\\s");
-            ladders.add(i, new SquarePointPair(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1])));
+            ladders.put(Integer.valueOf(tokens[0]),
+                    new SquarePointPair(Integer.valueOf(tokens[0]), Integer.valueOf(tokens[1])));
         }
         int S = scan.nextInt();
         scan.nextLine();
-        List<SquarePointPair> snakes = new ArrayList<SquarePointPair>(S);
+        Map<Integer, SquarePointPair> snakes = new HashMap<Integer, SquarePointPair>(S);
         for (int i = 0; i < S; i++) {
             String[] tokens = scan.nextLine().split("\\s");
-            snakes.add(i, new SquarePointPair(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1])));
+            snakes.put(Integer.valueOf(tokens[0]),
+                    new SquarePointPair(Integer.valueOf(tokens[0]), Integer.valueOf(tokens[1])));
         }
         testCase.populateEdges(ladders, snakes);
         return testCase;
@@ -57,7 +61,7 @@ public class SnakeAndLadder2 {
             }
         }
 
-        public void populateEdges(List<SquarePointPair> ladders, List<SquarePointPair> snakes) {
+        public void populateEdges(Map<Integer, SquarePointPair> ladders, Map<Integer, SquarePointPair> snakes) {
             for (int i = 1; i <= NUMBER_OF_SQUARES; i++) {
                 Vertex currentVertex = vertexList.get(i);
                 addNeighborsToVertex(currentVertex, ladders, snakes);
@@ -65,11 +69,54 @@ public class SnakeAndLadder2 {
         }
 
         private void addNeighborsToVertex(Vertex currentVertex,
-                                          List<SquarePointPair> ladders,
-                                          List<SquarePointPair> snakes) {
+                                          Map<Integer, SquarePointPair> ladders,
+                                          Map<Integer, SquarePointPair> snakes) {
+            Integer vertextId = currentVertex.getId();
             for (int i = 1; i <= 6; i++) {
-
+                Vertex destVertex = null;
+                if (ladders.get(i) != null) {
+                    Integer destId = ladders.get(i).to;
+                    destVertex = vertexList.get(destId);
+                } else if (snakes.get(i) != null) {
+                    Integer destId = snakes.get(i).to;
+                    destVertex = vertexList.get(destId);
+                } else {
+                    destVertex = vertexList.get(vertextId + i);
+                }
+                currentVertex.addNeighbor(destVertex, i);
             }
+        }
+
+        public void shortestPath() {
+            PriorityQueue<Vertex> pq = new PriorityQueue<Vertex>();
+            startVertex.setDistance(0);
+            pq.addAll(vertexList.values());
+
+            while (!pq.isEmpty()) {
+                Vertex current = pq.remove();
+                if (current.getDistance() == Integer.MAX_VALUE) {
+                    continue; // unreachable vertex
+                }
+                for (Vertex next : current.getConnections()) {
+                    Integer newDistance = current.getDistance() + current.getWeight(next);
+                    if (newDistance < next.getDistance()) {
+                        next.setDistance(newDistance);
+                        next.setParent(current);
+                        pq.remove(next);
+                        pq.add(next);
+                    }
+                }
+            }
+        }
+
+        public void printResult() {
+            for (int i = 1; i <= numberOfVertex; i++) {
+                if (i != startVertex.getId()) {
+                    Vertex vertex = vertexList.get(i);
+                    System.out.printf("%s ",  vertex.getDistance() == Integer.MAX_VALUE ? -1 : vertex.getDistance());
+                }
+            }
+            System.out.print("\n");
         }
     }
 
