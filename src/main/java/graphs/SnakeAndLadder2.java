@@ -24,7 +24,6 @@ public class SnakeAndLadder2 {
 
     private TestCase readTestCase(Scanner scan) {
         TestCase testCase = new TestCase();
-        testCase.populateVertexList();
         int L = scan.nextInt();
         scan.nextLine();
         Map<Integer, SquarePointPair> ladders = new HashMap<Integer, SquarePointPair>(L);
@@ -52,17 +51,19 @@ public class SnakeAndLadder2 {
 
         public TestCase() {
             vertexList = new HashMap<Integer, Vertex>();
-
+            numberOfVertex = NUMBER_OF_SQUARES;
+            populateVertexList();
+            startVertex = vertexList.get(1);
         }
 
         public void populateVertexList() {
-            for (int i = 1; i <= NUMBER_OF_SQUARES; i++) {
+            for (int i = 1; i <= numberOfVertex; i++) {
                 vertexList.put(i, new Vertex(i, Integer.MAX_VALUE));
             }
         }
 
         public void populateEdges(Map<Integer, SquarePointPair> ladders, Map<Integer, SquarePointPair> snakes) {
-            for (int i = 1; i <= NUMBER_OF_SQUARES; i++) {
+            for (int i = 1; i <= numberOfVertex; i++) {
                 Vertex currentVertex = vertexList.get(i);
                 addNeighborsToVertex(currentVertex, ladders, snakes);
             }
@@ -74,16 +75,16 @@ public class SnakeAndLadder2 {
             Integer vertextId = currentVertex.getId();
             for (int i = 1; i <= 6; i++) {
                 Vertex destVertex = null;
-                if (ladders.get(i) != null) {
-                    Integer destId = ladders.get(i).to;
-                    destVertex = vertexList.get(destId);
-                } else if (snakes.get(i) != null) {
-                    Integer destId = snakes.get(i).to;
-                    destVertex = vertexList.get(destId);
-                } else {
-                    destVertex = vertexList.get(vertextId + i);
+                Integer destId = vertextId + i;
+                if (ladders.get(destId) != null) {
+                    destId = ladders.get(destId).to;
+                } else if (snakes.get(destId) != null) {
+                    destId = snakes.get(destId).to;
                 }
-                currentVertex.addNeighbor(destVertex, i);
+                if (destId <= numberOfVertex) {
+                    destVertex = vertexList.get(destId);
+                    currentVertex.addNeighbor(destVertex, 1);
+                }
             }
         }
 
@@ -110,13 +111,15 @@ public class SnakeAndLadder2 {
         }
 
         public void printResult() {
-            for (int i = 1; i <= numberOfVertex; i++) {
-                if (i != startVertex.getId()) {
-                    Vertex vertex = vertexList.get(i);
-                    System.out.printf("%s ",  vertex.getDistance() == Integer.MAX_VALUE ? -1 : vertex.getDistance());
-                }
+            Vertex currentVertex = vertexList.get(100);
+            int steps = 0;
+            while (currentVertex.getParent() != null) {
+                //System.out.println(currentVertex.getId() + " ");
+                currentVertex = currentVertex.getParent();
+                steps++;
             }
-            System.out.print("\n");
+            //System.out.print(currentVertex.getId() + " ");
+            System.out.println(steps);
         }
     }
 
