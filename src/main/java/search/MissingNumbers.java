@@ -1,14 +1,14 @@
 package search;
 
 import java.io.InputStream;
-import java.util.Scanner;
+import java.util.*;
 
 public class MissingNumbers {
     public static final int LENGTH = 101;
     private Data[] numbers;
     public static void main(String[] args) {
         MissingNumbers mn = new MissingNumbers();
-        mn.readInput(System.in);
+        mn.readInput(mn.getClass().getClassLoader().getResourceAsStream("missing_numbers_input.txt"));
     }
 
     public MissingNumbers() {
@@ -21,16 +21,22 @@ public class MissingNumbers {
         readArray(scan, false);
         scan.nextLine();
         readArray(scan, true);
-        printResult();
+        printResult(numbers);
     }
 
-    private void printResult() {
+    private void printResult(Data[] numbers) {
+        List<Integer> result = new ArrayList<Integer>();
+        int i = 0;
         for (Data number : numbers) {
             if (number != null && number.occurrences > 0) {
-                for (int i = 0; i < number.occurrences; i++) {
-                    System.out.print(number.originalNum + " ");
-                }
+                result.add(number.originalNum);
             }
+        }
+
+        Collections.sort(result);
+
+        for (int num : result) {
+            System.out.print(num + " ");
         }
         System.out.println("");
     }
@@ -55,7 +61,6 @@ class Data {
         this.originalNum = originalNum;
         this.occurrences = occurrences;
     }
-
     int originalNum;
     int occurrences;
 }
