@@ -119,7 +119,7 @@ public class SnakeAndLadder2 {
                 steps++;
             }
             //System.out.print(currentVertex.getId() + " ");
-            System.out.println(steps);
+            System.out.println(steps == 0? -1: steps);
         }
     }
 
@@ -175,7 +175,7 @@ public class SnakeAndLadder2 {
 
         public void addNeighbor(Vertex vertex, Integer weight) {
             connectedTo.put(vertex, weight);
-            vertex.connectedTo.put(this, weight);
+            //vertex.connectedTo.put(this, weight);
         }
 
         public Set<Vertex> getConnections() {
