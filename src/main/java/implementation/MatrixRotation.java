@@ -23,8 +23,9 @@ public class MatrixRotation {
                 arr[i][j] = Integer.parseInt(line[j]);
             }
         }
-        printArray(arr);
-        rotateArray(arr, M, N, R);
+        for (int i = 0; i < R; i++) {
+            rotateArray(arr, M, N);
+        }
         printArray(arr);
     }
 
@@ -38,23 +39,53 @@ public class MatrixRotation {
         System.out.println("");
     }
 
-    private static void rotateArray(int[][] arr, int M, int N, int R) {
+    private static void rotateArray(int[][] arr, int M, int N) {
         int rowLimit = (M + 1) / 2;
         int colLimit = (N + 1) / 2;
         for (int i = 0; i < rowLimit; i++) {
             for (int j = 0; j < colLimit; j++) {
                 if (i == j) {
-                    rotateRow(arr, i, j, M, N);
+                    rotateRow(arr, i, j, M - i, N - i);
                 }
             }
         }
     }
 
     private static void rotateRow(int[][] arr, int row, int col, int M, int N) {
-        int first = arr[row][col];
+        int current = arr[row][col];
         int i = row;
         int j = col;
-        int L = arr.length;
-
+        int previous = arr[row][col + 1];
+        i++;
+        while (i <= M - 1) {
+            int temp = arr[i][j];
+            arr[i][j] = current;
+            current = temp;
+            i++;
+        }
+        i = M - 1;
+        j++;
+        while (j <= N - 1) {
+            int temp = arr[i][j];
+            arr[i][j] = current;
+            current = temp;
+            j++;
+        }
+        j = N - 1;
+        i--;
+        while(i > row) {
+            int temp = arr[i][j];
+            arr[i][j] = current;
+            current = temp;
+            i--;
+        }
+        i = row;
+        while(j > col) {
+            int temp = arr[i][j];
+            arr[i][j] = current;
+            current = temp;
+            j--;
+        }
+        arr[row][col] = previous;
     }
 }
