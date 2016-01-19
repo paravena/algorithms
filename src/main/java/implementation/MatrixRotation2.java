@@ -22,6 +22,9 @@ public class MatrixRotation2 {
                 arr[i][j] = Integer.parseInt(line[j]);
             }
         }
+        if (R >= ((M-1 + N-1)*2)) {
+            R = R % ((M-1 + N-1)*2);
+        }
         rotateArray(arr, M, N, R);
     }
 
