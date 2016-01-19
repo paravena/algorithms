@@ -28,53 +28,35 @@ public class MatrixRotation2 {
     private static void rotateArray(int[][] arr, int M, int N, int R) {
         int currentRow = 0;
         int currentCol = 0;
-        int rowLimit = M - 1;
-        int colLimit = N - 1;
-        int rowNestedLimit = (M + 1) / 2;
-        int colNestedLimit = (N + 1) / 2;
+        int rowLimit = 0;
+        int colLimit = 0;
+        int rowMiddleLimit = (M + 1) / 2;
+        int colMiddleLimit = (N + 1) / 2;
 
-        for (int i = 0; i < M - 1; i++) {
-            for (int j = 0; j < N - 1; j++) {
+        for (int i = 0; i <= M - 1; i++) {
+            for (int j = 0; j <= N - 1; j++) {
+                int i_idx = i;
+
+                if (i_idx >= rowMiddleLimit) {
+                    i_idx =  M - 1 - i;
+                }
+
+                if (j >= i_idx && j < (M -1 - i_idx)) {
+                    currentRow = currentCol = i_idx;
+                } else if (j < i_idx) {
+                    currentRow = currentCol = j;
+                } else if (j > (M - 1 - i_idx)) {
+                    currentRow = currentCol = N - j - 1;
+                }
+
+                rowLimit = M - currentRow - 1;
+                colLimit = N - currentCol - 1;
+                //System.out.println("arr["+i+"]["+j+"] belongs to " + currentRow + "," + currentCol + " and " + rowLimit + "," + colLimit);
                 printElement(arr, i, j, currentRow, currentCol, rowLimit, colLimit, R);
-
-
-                if (i == j) {
-                    currentRow = i;
-                    currentCol = i;
-                }
             }
-        }
-        /*
-        for (int i = 0; i < rowLimit; i++) {
-            for (int j = 0; j < colLimit; j++) {
-                if (i == j) {
-                    rotateRow(arr, i, j, M - i, N - i, R);
-                }
-            }
-        }
-        */
-    }
-
-    private static void rotateRow(int[][] arr, int row, int col, int M, int N, int R) {
-        int i = row;
-        int j = col;
-        for (; j < N - 1; j++) {
-            printElement(arr, row, j, row, col, M - 1, N - 1, R);
-        }
-
-        for (; i < M - 1; i++) {
-            printElement(arr, i, j, row, col, M - 1, N - 1, R);
-        }
-
-        for (; j > col; j--) {
-            printElement(arr, i, j, row, col, M - 1, N - 1, R);
-        }
-
-        for (; i > row; i--) {
-            printElement(arr, i, j, row, col, M - 1, N - 1, R);
+            System.out.println("");
         }
     }
-
 
     private static void printElement(int[][] arr, int i,
                                      int j,
@@ -83,6 +65,7 @@ public class MatrixRotation2 {
                                      int M,
                                      int N,
                                      int R) {
+        //System.out.print("arr["+i+"]["+j+"] rotated to ");
         int counter = 0;
         while (counter < R) {
             if ((j >= col && j <= N) && i == row) {
@@ -129,7 +112,7 @@ public class MatrixRotation2 {
                 }
             }
         }
-
+        //System.out.println("arr["+i+"]["+j+"]");
         System.out.print(arr[i][j] + " ");
     }
 }
