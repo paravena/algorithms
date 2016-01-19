@@ -41,11 +41,11 @@ public class MatrixRotation2 {
                     i_idx =  M - 1 - i;
                 }
 
-                if (j >= i_idx && j < (M -1 - i_idx)) {
+                if (j >= i_idx && j <= (N -1 - i_idx)) {
                     currentRow = currentCol = i_idx;
                 } else if (j < i_idx) {
                     currentRow = currentCol = j;
-                } else if (j > (M - 1 - i_idx)) {
+                } else if (j >= (M - 1 - i_idx)) {
                     currentRow = currentCol = N - j - 1;
                 }
 
