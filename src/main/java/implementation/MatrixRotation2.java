@@ -22,43 +22,40 @@ public class MatrixRotation2 {
                 arr[i][j] = Integer.parseInt(line[j]);
             }
         }
-        if (R >= ((M-1 + N-1)*2)) {
-            R = R % ((M-1 + N-1)*2);
-        }
         rotateArray(arr, M, N, R);
     }
 
     private static void rotateArray(int[][] arr, int M, int N, int R) {
         int currentRow = 0;
         int currentCol = 0;
-        int rowLimit = 0;
-        int colLimit = 0;
         int rowMiddleLimit = (M + 1) / 2;
-        int colMiddleLimit = (N + 1) / 2;
+        int maxRows = M - 1;
+        int maxColumns = N - 1;
 
-        for (int i = 0; i <= M - 1; i++) {
-            for (int j = 0; j <= N - 1; j++) {
+        for (int i = 0; i <= maxRows; i++) {
+            for (int j = 0; j <= maxColumns; j++) {
                 int i_idx = i;
 
                 if (i_idx >= rowMiddleLimit) {
                     i_idx =  M - 1 - i;
                 }
 
-                if (j >= i_idx && j <= (N -1 - i_idx)) {
+                if (j >= i_idx && j <= (maxColumns - i_idx)) {
                     currentRow = currentCol = i_idx;
                 } else if (j < i_idx) {
                     currentRow = currentCol = j;
-                } else if (j >= (M - 1 - i_idx)) {
+                } else if (j >= (maxRows - i_idx)) {
                     currentRow = currentCol = N - j - 1;
                 }
 
-                rowLimit = M - currentRow - 1;
-                colLimit = N - currentCol - 1;
+                int rowLimit = maxRows - currentRow;
+                int colLimit = maxColumns - currentCol;
                 //System.out.println("arr["+i+"]["+j+"] belongs to " + currentRow + "," + currentCol + " and " + rowLimit + "," + colLimit);
                 printElement(arr, i, j, currentRow, currentCol, rowLimit, colLimit, R);
             }
             System.out.println("");
         }
+        System.out.println("");
     }
 
     private static void printElement(int[][] arr, int i,
@@ -69,6 +66,9 @@ public class MatrixRotation2 {
                                      int N,
                                      int R) {
         //System.out.print("arr["+i+"]["+j+"] rotated to ");
+        //if (R >= (M + N) * 2) {
+        //    R = R % ((M + N) * 2);
+        //}
         int counter = 0;
         while (counter < R) {
             if ((j >= col && j <= N) && i == row) {
