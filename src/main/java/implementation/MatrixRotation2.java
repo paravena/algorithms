@@ -34,6 +34,11 @@ public class MatrixRotation2 {
 
         for (int i = 0; i <= maxRows; i++) {
             for (int j = 0; j <= maxColumns; j++) {
+                //System.out.println("i = " + i + " j: " + j);
+                if (i == 41 && j == 40) {
+                    //System.out.println("test");
+                }
+
                 int i_idx = i;
                 if (i_idx >= rowMiddleLimit) {
                     i_idx =  maxRows - i;
@@ -49,7 +54,9 @@ public class MatrixRotation2 {
                 int rowLimit = maxRows - currentRow;
                 int colLimit = maxColumns - currentCol;
                 //System.out.println("arr["+i+"]["+j+"] belongs to " + currentRow + "," + currentCol + " and " + rowLimit + "," + colLimit);
-                printElement(arr, i, j, currentRow, currentCol, rowLimit, colLimit, R);
+                if (colLimit >= currentCol) {
+                    printElement(arr, i, j, currentRow, currentCol, rowLimit, colLimit, R);
+                }
             }
             System.out.println("");
         }
