@@ -35,17 +35,15 @@ public class MatrixRotation2 {
         for (int i = 0; i <= maxRows; i++) {
             for (int j = 0; j <= maxColumns; j++) {
                 int i_idx = i;
-
                 if (i_idx >= rowMiddleLimit) {
-                    i_idx =  M - 1 - i;
+                    i_idx =  maxRows - i;
                 }
-
                 if (j >= i_idx && j <= (maxColumns - i_idx)) {
                     currentRow = currentCol = i_idx;
                 } else if (j < i_idx) {
                     currentRow = currentCol = j;
-                } else if (j >= (maxRows - i_idx)) {
-                    currentRow = currentCol = N - j - 1;
+                } else if (j >= (maxColumns - i_idx)) {
+                    currentRow = currentCol = maxColumns - j;
                 }
 
                 int rowLimit = maxRows - currentRow;
@@ -65,10 +63,13 @@ public class MatrixRotation2 {
                                      int M,
                                      int N,
                                      int R) {
-        //System.out.print("arr["+i+"]["+j+"] rotated to ");
-        //if (R >= (M + N) * 2) {
-        //    R = R % ((M + N) * 2);
-        //}
+
+        int H = M - row + 1;
+        int W = N - col + 1;
+        int L = (W + (H - 2)) * 2;
+        if (R >= L) {
+            R = R % L;
+        }
         int counter = 0;
         while (counter < R) {
             if ((j >= col && j <= N) && i == row) {
