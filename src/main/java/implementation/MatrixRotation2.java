@@ -34,19 +34,19 @@ public class MatrixRotation2 {
 
         for (int i = 0; i <= maxRows; i++) {
             for (int j = 0; j <= maxColumns; j++) {
-                //System.out.println("i = " + i + " j: " + j);
-                if (i == 41 && j == 40) {
-                    //System.out.println("test");
-                }
-
-                int i_idx = i;
+               int i_idx = i;
                 if (i_idx >= rowMiddleLimit) {
                     i_idx =  maxRows - i;
                 }
+
                 if (j >= i_idx && j <= (maxColumns - i_idx)) {
                     currentRow = currentCol = i_idx;
                 } else if (j < i_idx) {
-                    currentRow = currentCol = j;
+                    if ((maxColumns + 1) % 2 == 0) {
+                        currentRow = currentCol = j - 1;
+                    } else {
+                        currentRow = currentCol = j;
+                    }
                 } else if (j >= (maxColumns - i_idx)) {
                     currentRow = currentCol = maxColumns - j;
                 }
@@ -54,9 +54,7 @@ public class MatrixRotation2 {
                 int rowLimit = maxRows - currentRow;
                 int colLimit = maxColumns - currentCol;
                 //System.out.println("arr["+i+"]["+j+"] belongs to " + currentRow + "," + currentCol + " and " + rowLimit + "," + colLimit);
-                if (colLimit >= currentCol) {
-                    printElement(arr, i, j, currentRow, currentCol, rowLimit, colLimit, R);
-                }
+                printElement(arr, i, j, currentRow, currentCol, rowLimit, colLimit, R);
             }
             System.out.println("");
         }
@@ -70,7 +68,6 @@ public class MatrixRotation2 {
                                      int M,
                                      int N,
                                      int R) {
-
         int H = M - row + 1;
         int W = N - col + 1;
         int L = (W + (H - 2)) * 2;
