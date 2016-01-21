@@ -31,28 +31,30 @@ public class MatrixRotation2 {
         int rowMiddleLimit = (M + 1) / 2;
         int colMiddleLimit = (N + 1) / 2;
         int maxRows = M - 1;
-        int maxColumns = N - 1;
+        int maxCols = N - 1;
 
         for (int i = 0; i <= maxRows; i++) {
-            for (int j = 0; j <= maxColumns; j++) {
-               int i_idx = i;
+            for (int j = 0; j <= maxCols; j++) {
+                int i_idx = i;
+
                 if (i_idx >= rowMiddleLimit) {
                     i_idx =  maxRows - i;
                 }
 
-                if (j >= i_idx && j <= (maxColumns - i_idx)) {
+                int j_idx = j;
+
+                if (j_idx >= colMiddleLimit) {
+                    j_idx = maxCols - j;
+                }
+
+                if (i_idx > j_idx) {
+                    currentRow = currentCol = j_idx;
+                } else {
                     currentRow = currentCol = i_idx;
-                } else if (j < i_idx) {
-                    currentRow = currentCol = j;
-                    if (j == colMiddleLimit) {
-                        currentRow = currentCol = j - 1;
-                    }
-                } else if (j >= (maxColumns - i_idx)) {
-                    currentRow = currentCol = maxColumns - j;
                 }
 
                 int rowLimit = maxRows - currentRow;
-                int colLimit = maxColumns - currentCol;
+                int colLimit = maxCols - currentCol;
                 //System.out.println("arr["+i+"]["+j+"] belongs to " + currentRow + "," + currentCol + " and " + rowLimit + "," + colLimit);
                 printElement(arr, i, j, currentRow, currentCol, rowLimit, colLimit, R);
             }
