@@ -29,6 +29,7 @@ public class MatrixRotation2 {
         int currentRow = 0;
         int currentCol = 0;
         int rowMiddleLimit = (M + 1) / 2;
+        int colMiddleLimit = (N + 1) / 2;
         int maxRows = M - 1;
         int maxColumns = N - 1;
 
@@ -42,10 +43,9 @@ public class MatrixRotation2 {
                 if (j >= i_idx && j <= (maxColumns - i_idx)) {
                     currentRow = currentCol = i_idx;
                 } else if (j < i_idx) {
-                    if ((maxColumns + 1) % 2 == 0) {
+                    currentRow = currentCol = j;
+                    if (j == colMiddleLimit) {
                         currentRow = currentCol = j - 1;
-                    } else {
-                        currentRow = currentCol = j;
                     }
                 } else if (j >= (maxColumns - i_idx)) {
                     currentRow = currentCol = maxColumns - j;
