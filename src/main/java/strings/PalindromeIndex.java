@@ -26,10 +26,10 @@ public class PalindromeIndex {
             char c1 = word.charAt(i);
             char c2 = word.charAt(j);
             if (c1 != c2) {
-                if (i < (word.length() - 1) && word.charAt(i + 1) == c2) {
+                if (i < (word.length() - 1) && word.charAt(i + 1) == c2 && word.charAt(i + 2) == word.charAt(j - 1)) {
                     idx = i++;
                     continue;
-                } else if (j > 0 && word.charAt(j - 1) == c1) {
+                } else if (word.charAt(j - 1) == c1) {
                     idx = j--;
                     continue;
                 }
