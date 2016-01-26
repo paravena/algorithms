@@ -67,8 +67,14 @@ public class CountLuck {
 
 
         public void countLuck(int k) {
-
+            // From start move to north until there are more than choose option
+            int counter = 0;
+            int currentRow = startRow;
+            int currentCol = startCol;
+            //while (isNextPositionAvailable('N', currentRow, currentCol))
         }
+
+
 
         public void showMaze() {
             for (int i = 0; i < mazeArr.length; i++) {
