@@ -1,6 +1,5 @@
 package search;
 
-import javax.annotation.PostConstruct;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,6 @@ public class CountLuck {
             Maze maze = initializeMaze(N, M, scan);
             int K = scan.nextInt();
             maze.countLuck(K);
-            maze.showMaze();
             scan.nextLine();
         }
     }
@@ -60,12 +58,8 @@ public class CountLuck {
             }
         }
 
-        public boolean isTree(int row, int col) {
-            return mazeArr[row][col] == TREE;
-        }
-
         public boolean isEmpty(int row, int col) {
-            return mazeArr[row][col] == EMPTY;
+            return mazeArr[row][col] == EMPTY || mazeArr[row][col] == EXIT;
         }
 
         public boolean isExit(int row, int col) {
@@ -73,137 +67,119 @@ public class CountLuck {
         }
 
         public void countLuck(int K) {
-            int result = countLuck(startRow, startCol, Direction.NORTH);
-            if (result == -1) {
-                result = countLuck(startRow, startCol, Direction.EAST);
-            }
-            if (result == -1) {
-                result = countLuck(startRow, startCol, Direction.SOUTH);
-            }
-            if (result == -1) {
-                result = countLuck(startRow, startCol, Direction.WEST);
-            }
-            if (result == K) {
-                System.out.println("Impressed");
-            } else {
-                System.out.println("Oops!");
-            }
+            countLuck(startRow, startCol, Direction.NORTH, K);
         }
 
-        public int countLuck(int startRow, int startCol, Direction direction) {
-            // From start move to north until there is a choosing position
-            mazeArr[startRow][startCol] = VISITED;
-            return walkUntilChoosingPositionOrExit(startRow, startCol, direction);
-        }
+        private void countLuck(int currentRow, int currentCol, Direction direction, int k) {
+            if (isExit(currentRow, currentCol)) {
+                if (k == 0) {
+                    System.out.println("Impressed");
+                } else {
+                    System.out.println("Oops!");
+                }
+                return;
+            }
+            mazeArr[currentRow][currentCol] = VISITED;
 
-        private int walkUntilChoosingPositionOrExit(int currentRow, int currentCol, Direction direction) {
-            int result = 0;
             switch (direction) {
                 case NORTH:
                     while (currentRow > 0
-                            && !isChoosingPosition(currentRow, currentCol, direction)
-                            && !isEndPosition(currentRow, currentCol)) {
-                        if (isExit(currentRow, currentCol)) {
-                            return 0;
-                        }
+                            && getChoosingPositions(currentRow, currentCol) == null
+                            && !isEndPosition(currentRow, currentCol) && !isExit(currentRow, currentCol)) {
                         mazeArr[currentRow--][currentCol] = VISITED;
                     }
                     break;
                 case SOUTH:
                     while (currentRow < (mazeArr.length - 1)
-                            && !isChoosingPosition(currentRow, currentCol, direction)
-                            && !isEndPosition(currentRow, currentCol)) {
-                        if (isExit(currentRow, currentCol)) {
-                            return 0;
-                        }
+                            && getChoosingPositions(currentRow, currentCol) == null
+                            && !isEndPosition(currentRow, currentCol) && !isExit(currentRow, currentCol)) {
                         mazeArr[currentRow++][currentCol] = VISITED;
                     }
                     break;
                 case WEST:
                     while (currentCol > 0
-                            && !isChoosingPosition(currentRow, currentCol, direction)
-                            && !isEndPosition(currentRow, currentCol)) {
-                        if (isExit(currentRow, currentCol)) {
-                            return 0;
-                        }
+                            && getChoosingPositions(currentRow, currentCol) == null
+                            && !isEndPosition(currentRow, currentCol) && !isExit(currentRow, currentCol)) {
                         mazeArr[currentRow][currentCol--] = VISITED;
                     }
 
                     break;
                 case EAST:
-                    while (currentCol < (mazeArr[currentCol].length - 1)
-                            && !isChoosingPosition(currentRow, currentCol, direction)
-                            && !isEndPosition(currentRow, currentCol)) {
-                        if (isExit(currentRow, currentCol)) {
-                            return 0;
-                        }
+                    while (currentCol < (mazeArr[currentRow].length - 1)
+                            && getChoosingPositions(currentRow, currentCol) == null
+                            && !isEndPosition(currentRow, currentCol) && !isExit(currentRow, currentCol)) {
                         mazeArr[currentRow][currentCol++] = VISITED;
                     }
                     break;
             }
-            if (!isEndPosition(currentRow, currentCol)) {
-                result = -1;
-            } else if (isChoosingPosition(currentRow, currentCol, direction)) {
-                if(direction == Direction.NORTH || direction == Direction.SOUTH) {
-                    result += countLuck(currentRow, currentCol, Direction.WEST) > 0 ? 1 : 0;
-                    result += countLuck(currentRow, currentCol, Direction.EAST) > 0 ? 1 : 0;
+
+            List<Position> choosingPositions = getChoosingPositions(currentRow, currentCol);
+
+            if (choosingPositions != null) {
+                if (choosingPositions.size() > 1) {
+                    for (Position pos : choosingPositions) {
+                        countLuck(pos.getRow(), pos.getCol(), pos.getDirection(), k - 1);
+                    }
                 } else {
-                    result += countLuck(currentRow, currentCol, Direction.NORTH) > 0 ? 1 : 0;
-                    result += countLuck(currentRow, currentCol, Direction.SOUTH) > 0 ? 1 : 0;
+                   countLuck(choosingPositions.get(0).getRow(),
+                            choosingPositions.get(0).getCol(), choosingPositions.get(0).getDirection(), k);
+                }
+            } else if (isExit(currentRow, currentCol)) {
+                if (k == 0) {
+                    System.out.println("Impressed");
+                } else {
+                    System.out.println("Oops!");
                 }
             }
-            return result;
         }
 
         private boolean isEndPosition(int currentRow, int currentCol) {
             int count = 0;
             if (currentRow > 0
-                    && mazeArr[currentRow - 1][currentCol] == EMPTY) {
+                    && isEmpty(currentRow - 1, currentCol)) {
                 count++;
             }
 
             if (currentRow < (mazeArr.length - 1)
-                    && mazeArr[currentRow + 1][currentCol] == EMPTY) {
+                    && isEmpty(currentRow + 1, currentCol)) {
                 count++;
             }
 
             if (currentCol > 0
-                    && mazeArr[currentRow][currentCol - 1] == EMPTY) {
+                    && isEmpty(currentRow, currentCol - 1)) {
                 count++;
             }
 
             if (currentCol < (mazeArr[currentRow].length - 1)
-                    && mazeArr[currentRow][currentCol + 1] == EMPTY) {
+                    && isEmpty(currentRow, currentCol + 1)) {
                 count++;
             }
-            return count > 0;
+            return count == 0;
         }
 
-        private List<Position> isChoosingPosition(int currentRow, int currentCol, Direction direction) {
+        private List<Position> getChoosingPositions(int currentRow, int currentCol) {
+            if (isExit(currentRow, currentCol)) return null;
             List<Position> choosingPositions = new ArrayList<Position>();
-            if (direction != Direction.NORTH
-                    && currentRow > 0
-                    && mazeArr[currentRow - 1][currentCol] == EMPTY) {
+            if (currentRow > 0
+                    && isEmpty(currentRow - 1, currentCol)) {
                 choosingPositions.add(new Position(currentRow - 1, currentCol, Direction.NORTH));
             }
 
-            if (direction != Direction.SOUTH
-                    && currentRow < (mazeArr.length - 1)
-                    && mazeArr[currentRow + 1][currentCol] == EMPTY) {
+            if (currentRow < (mazeArr.length - 1)
+                    && isEmpty(currentRow + 1, currentCol))  {
                 choosingPositions.add(new Position(currentRow + 1, currentCol, Direction.SOUTH));
             }
 
-            if (direction != Direction.WEST
-                    && currentCol > 0
-                    && mazeArr[currentRow][currentCol - 1] == EMPTY) {
+            if (currentCol > 0
+                    && isEmpty(currentRow, currentCol - 1)) {
                 choosingPositions.add(new Position(currentRow, currentCol - 1, Direction.WEST));
             }
 
-            if (direction != Direction.EAST
-                    && currentCol < (mazeArr[currentRow].length - 1)
-                    && mazeArr[currentRow][currentCol + 1] == EMPTY) {
+            if (currentCol < (mazeArr[currentRow].length - 1)
+                    && isEmpty(currentRow, currentCol + 1)) {
                 choosingPositions.add(new Position(currentRow, currentCol + 1, Direction.EAST));
             }
+            mazeArr[currentRow][currentCol] = VISITED;
             return choosingPositions.isEmpty() ? null : choosingPositions;
         }
 
