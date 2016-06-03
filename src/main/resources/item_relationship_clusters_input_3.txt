@@ -1,0 +1,8 @@
+0.15
+6
+Item1 Item2 0.2
+Item2 Item3 0.1
+Item4 Item5 0.3
+Item5 Item6 0.4
+Item7 Item8 0.3
+Item8 Item9 0.4
