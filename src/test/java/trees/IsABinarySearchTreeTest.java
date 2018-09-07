@@ -8,17 +8,17 @@ import static junit.framework.TestCase.assertTrue;
 public class IsABinarySearchTreeTest {
     @Test
     public void correctBSTShouldBeValidated() {
-        Node root = initializeValidBynarySearchTree();
+        Node root = initializeValidBinarySearchTree();
         assertTrue("should be a valid binary search tree", IsABinarySearchTree.checkBST(root));
     }
 
     @Test
     public void incorrectBSTShouldBeValidated() {
-        Node root = initializeInvalidBynarySearchTree();
+        Node root = initializeInvalidBinarySearchTree();
         assertFalse("should be an invalid binary search tree", IsABinarySearchTree.checkBST(root));
     }
 
-    public Node initializeValidBynarySearchTree() {
+    private Node initializeValidBinarySearchTree() {
         /*
                3
              /   \
@@ -52,7 +52,7 @@ public class IsABinarySearchTreeTest {
         return root;
     }
 
-    public Node initializeInvalidBynarySearchTree() {
+    private Node initializeInvalidBinarySearchTree() {
         /*
                3
              /   \
