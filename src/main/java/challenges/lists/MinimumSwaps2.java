@@ -1,4 +1,4 @@
-package challenges;
+package challenges.lists;
 
 public class MinimumSwaps2 {
     public static int minimumSwaps(int[] arr) {
@@ -15,7 +15,6 @@ public class MinimumSwaps2 {
     }
 
     public static void swap(int i, int j, int[] arr) {
-        System.out.println("swapping position " + i + " with " + j);
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
