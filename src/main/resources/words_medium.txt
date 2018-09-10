@@ -29654,7 +29654,7 @@ listings
 listless
 listlessly
 listlessness
-lists
+challenges.lists
 lit
 litanies
 litany
@@ -52906,7 +52906,7 @@ trebles
 trebling
 tree
 treeless
-trees
+challenges.trees
 treetop
 treetops
 trefoil

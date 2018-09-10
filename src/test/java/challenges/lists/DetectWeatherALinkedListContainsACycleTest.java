@@ -1,20 +1,17 @@
-package lists;
+package challenges.lists;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import challenges.lists.DetectWeatherALinkedListContainsACycle;
 import org.junit.Test;
-
-import challenges.lists.SinglyLinkedList;
 
 import static junit.framework.TestCase.assertFalse;
 
 public class DetectWeatherALinkedListContainsACycleTest {
     @Test
     public void shouldPassTestCase1() {
-        List<SinglyLinkedList> result = readFromTestDataFromFile("detect_weather_a_linked_list_contains_a_cycle_input_1.txt");
+        List<SinglyLinkedList> result = readTestCaseDataFromFile("detect_weather_a_linked_list_contains_a_cycle_input_1.txt");
         result.stream().forEach(list -> {
             assertFalse(DetectWeatherALinkedListContainsACycle.hasCycle(list.head));
         });
@@ -22,13 +19,13 @@ public class DetectWeatherALinkedListContainsACycleTest {
 
     @Test
     public void shouldPassTestCase2() {
-        List<SinglyLinkedList> result = readFromTestDataFromFile("detect_weather_a_linked_list_contains_a_cycle_input_2.txt");
+        List<SinglyLinkedList> result = readTestCaseDataFromFile("detect_weather_a_linked_list_contains_a_cycle_input_2.txt");
         result.stream().forEach(list -> {
             assertFalse(DetectWeatherALinkedListContainsACycle.hasCycle(list.head));
         });
     }
 
-    private List<SinglyLinkedList> readFromTestDataFromFile(String testDataFilePath) {
+    private List<SinglyLinkedList> readTestCaseDataFromFile(String testDataFilePath) {
         List<SinglyLinkedList> result = new ArrayList<>();
         Scanner scanner = new Scanner(this.getClass().getClassLoader().getResourceAsStream(testDataFilePath));
 

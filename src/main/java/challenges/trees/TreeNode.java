@@ -1,4 +1,4 @@
-package trees;
+package challenges.trees;
 
 public class TreeNode<T extends Comparable<T>,V> {
     protected T key;

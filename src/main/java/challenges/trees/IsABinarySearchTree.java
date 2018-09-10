@@ -1,4 +1,4 @@
-package trees;
+package challenges.trees;
 
 public class IsABinarySearchTree {
     static boolean checkBST(Node root) {

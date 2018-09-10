@@ -1,4 +1,4 @@
-package trees;
+package challenges.trees;
 
 import basic.Queue;
 

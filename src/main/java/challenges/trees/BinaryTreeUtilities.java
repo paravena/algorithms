@@ -1,4 +1,4 @@
-package trees;
+package challenges.trees;
 
 import java.util.Scanner;
 import java.util.Stack;
